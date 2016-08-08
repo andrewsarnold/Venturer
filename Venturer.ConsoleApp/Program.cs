@@ -50,8 +50,8 @@ namespace Venturer.ConsoleApp
 				Console.Title = game.Title;
 				Console.OutputEncoding = Encoding.Unicode;
 				Console.CursorVisible = false;
-				
-				Write(game.ToScreen(), h);
+
+				game.Draw += () => { Write(game.ToScreen(), h); };
 
 				Console.ReadKey();
 			}
