@@ -34,12 +34,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Coord.cs" />
+    <Compile Include="Environment\Room.cs" />
+    <Compile Include="Environment\Shadowcaster.cs" />
+    <Compile Include="Environment\Tile.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Output\CodePoint.cs" />
     <Compile Include="Output\Glyph.cs" />
     <Compile Include="Output\ViewPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Output\Screen.cs" />
-    <Compile Include="Screens\TestScreen.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

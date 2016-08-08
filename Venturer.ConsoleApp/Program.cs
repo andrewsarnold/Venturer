@@ -51,11 +51,12 @@ namespace Venturer.ConsoleApp
 				Console.OutputEncoding = Encoding.Unicode;
 				Console.CursorVisible = false;
 
-				game.Draw += () => { Write(game.ToScreen(), h); };
+				//game.Draw += () => { Write(game.ToScreen(), h); };
 
 				bool shouldQuit;
 				do
 				{
+					Write(game.ToScreen(), h);
 					shouldQuit = game.Input(Console.ReadKey(true));
 				} while (!shouldQuit);
 			}
