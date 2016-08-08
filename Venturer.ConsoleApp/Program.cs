@@ -53,7 +53,11 @@ namespace Venturer.ConsoleApp
 
 				game.Draw += () => { Write(game.ToScreen(), h); };
 
-				Console.ReadKey();
+				bool shouldQuit;
+				do
+				{
+					shouldQuit = game.Input(Console.ReadKey(true));
+				} while (!shouldQuit);
 			}
 		}
 

@@ -27,6 +27,16 @@ namespace Venturer.Core
 			timer.Start();
 		}
 
+		/// <summary>
+		///     Processes key input.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns>True when input sequence should end.</returns>
+		public bool Input(ConsoleKeyInfo key)
+		{
+			return key.Key == ConsoleKey.Escape;
+		}
+
 		public void Dispose()
 		{
 			// Save and clean up here
