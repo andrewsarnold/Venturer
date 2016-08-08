@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venturer.ConsoleApp", "Venturer.ConsoleApp\Venturer.ConsoleApp.csproj", "{A94612C3-746E-41DD-94EB-E97CDF16A59B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venturer.Core", "Venturer.Core\Venturer.Core.csproj", "{1945300C-929F-493E-830D-A81AF2B69F9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A94612C3-746E-41DD-94EB-E97CDF16A59B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A94612C3-746E-41DD-94EB-E97CDF16A59B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A94612C3-746E-41DD-94EB-E97CDF16A59B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1945300C-929F-493E-830D-A81AF2B69F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1945300C-929F-493E-830D-A81AF2B69F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1945300C-929F-493E-830D-A81AF2B69F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1945300C-929F-493E-830D-A81AF2B69F9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
