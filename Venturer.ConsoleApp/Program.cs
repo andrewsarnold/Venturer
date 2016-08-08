@@ -32,9 +32,9 @@ namespace Venturer.ConsoleApp
 		#endregion
 
 		[STAThread]
-		public static void Main(string[] args)
+		public static void Main()
 		{
-			SafeFileHandle h = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
+			var h = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
 			if (h.IsInvalid)
 			{
 				Console.WriteLine("Error initializing.");
@@ -50,18 +50,13 @@ namespace Venturer.ConsoleApp
 				Console.OutputEncoding = Encoding.UTF8;
 				Console.CursorVisible = false;
 
-				for (var i = 20; i <= 10000; i++)
+				var frameCount = 0;
+				game.Draw += () =>
 				{
-					Console.WriteLine("{0}\t\\u{1}\t{2}",
-						i,
-						i.ToString("x4"),
-						char.ConvertFromUtf32(i));
+					frameCount++;
+					Console.WriteLine(frameCount);
+				};
 
-					if (i % 20 == 0)
-					{
-						Console.ReadKey();
-					}
-				}
 				Console.ReadKey();
 			}
 		}
