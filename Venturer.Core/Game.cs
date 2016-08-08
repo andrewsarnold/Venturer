@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Timers;
+using Venturer.Core.Output;
+using Venturer.Core.Screens;
 
 namespace Venturer.Core
 {
@@ -28,6 +30,11 @@ namespace Venturer.Core
 		public void Dispose()
 		{
 			// Save and clean up here
+		}
+
+		public Screen ToScreen()
+		{
+			return new TestScreen().ToScreen(WindowWidth, WindowHeight);
 		}
 	}
 }
