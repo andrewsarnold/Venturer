@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Venturer.Core.Input;
 
 namespace Venturer.Core.Output
 {
@@ -9,7 +9,7 @@ namespace Venturer.Core.Output
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns>Returns True if input should continue to bubble down through the screen stack.</returns>
-		internal abstract bool HandleInput(ConsoleKeyInfo key);
+		internal abstract bool HandleInput(Command command);
 
 		/// <summary>
 		/// Writes a graphical representation of this viewport to a Screen object.
