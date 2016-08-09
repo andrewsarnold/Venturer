@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 using Venturer.Core;
@@ -10,32 +9,10 @@ namespace Venturer.ConsoleApp
 {
 	public static class Program
 	{
-		#region DllImports
-
-		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-		private static extern SafeFileHandle CreateFile(
-			string fileName,
-			[MarshalAs(UnmanagedType.U4)] uint fileAccess,
-			[MarshalAs(UnmanagedType.U4)] uint fileShare,
-			IntPtr securityAttributes,
-			[MarshalAs(UnmanagedType.U4)] FileMode creationDisposition,
-			[MarshalAs(UnmanagedType.U4)] int flags,
-			IntPtr template);
-
-		[DllImport("kernel32.dll", SetLastError = true)]
-		private static extern bool WriteConsoleOutput(
-			SafeFileHandle hConsoleOutput,
-			CharInfo[] lpBuffer,
-			Coord dwBufferSize,
-			Coord dwBufferCoord,
-			ref SmallRect lpWriteRegion);
-
-		#endregion
-
 		[STAThread]
 		public static void Main()
 		{
-			var h = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
+			var h = NativeMethods.CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
 			if (h.IsInvalid)
 			{
 				Console.WriteLine("Error initializing.");
@@ -51,9 +28,14 @@ namespace Venturer.ConsoleApp
 				Console.OutputEncoding = Encoding.Unicode;
 				Console.CursorVisible = false;
 
-				game.Draw += () => { Write(game.ToScreen(), h); };
+				//game.Draw += () => { Write(game.ToScreen(), h); };
 
-				Console.ReadKey();
+				bool shouldQuit;
+				do
+				{
+					Write(game.ToScreen(), h);
+					shouldQuit = game.Input(Console.ReadKey(true));
+				} while (!shouldQuit);
 			}
 		}
 
@@ -72,7 +54,7 @@ namespace Venturer.ConsoleApp
 				}
 			}
 
-			WriteConsoleOutput(h, buf,
+			NativeMethods.WriteConsoleOutput(h, buf,
 				new Coord { X = Game.WindowWidth, Y = Game.WindowHeight },
 				new Coord { X = 0, Y = 0 },
 				ref rect);
@@ -83,40 +65,4 @@ namespace Venturer.ConsoleApp
 			return (short)((short)foreground + 16 * (short)background);
 		}
 	}
-
-	#region Structs
-
-	[StructLayout(LayoutKind.Sequential)]
-	public struct Coord
-	{
-		public short X;
-		public short Y;
-	};
-
-	[StructLayout(LayoutKind.Explicit)]
-	public struct CharUnion
-	{
-		[FieldOffset(0)]
-		public byte AsciiChar;
-	}
-
-	[StructLayout(LayoutKind.Explicit)]
-	public struct CharInfo
-	{
-		[FieldOffset(0)]
-		public CharUnion Char;
-		[FieldOffset(2)]
-		public short Attributes;
-	}
-
-	[StructLayout(LayoutKind.Sequential)]
-	public struct SmallRect
-	{
-		public short Left;
-		public short Top;
-		public short Right;
-		public short Bottom;
-	}
-
-	#endregion
 }
