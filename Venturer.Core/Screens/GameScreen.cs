@@ -106,7 +106,7 @@ namespace Venturer.Core.Screens
 
 		private Direction TryToMove(Coord target, bool movedHorizontally)
 		{
-			var couldMove = _room.IsFreeOfArchitecture(target);
+			var couldMove = _room.IsInRoom(target) && _room.IsFreeOfArchitecture(target);
 			if (couldMove)
 			{
 				_player.Position = target;

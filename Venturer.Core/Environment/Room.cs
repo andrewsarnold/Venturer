@@ -41,6 +41,15 @@ namespace Venturer.Core.Environment
 				   && _tiles[target.X, target.Y].CanTraverse;
 		}
 
+		internal bool IsInRoom(Coord target)
+		{
+			return
+				target.X >= 0 &&
+				target.Y >= 0 &&
+				target.X < Width &&
+				target.Y < Height;
+		}
+
 		private bool[,] FindLitTiles(Coord player)
 		{
 			var isLit = new bool[Width, Height];
