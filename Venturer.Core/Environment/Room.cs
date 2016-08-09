@@ -1,11 +1,13 @@
-﻿using Venturer.Core.Common;
+﻿using System;
+using Venturer.Core.Common;
+using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Output;
 
 namespace Venturer.Core.Environment
 {
 	public class Room
 	{
-		private int _viewDistance;
+		private readonly int _viewDistance;
 		private readonly Tile[,] _tiles;
 
 		public int Width { get; private set; }
@@ -14,7 +16,7 @@ namespace Venturer.Core.Environment
 		internal Room(Tile[,] tiles, int width, int height)
 		{
 			_tiles = tiles;
-			_viewDistance = 5;
+			_viewDistance = 15;
 			Width = width;
 			Height = height;
 
@@ -31,6 +33,12 @@ namespace Venturer.Core.Environment
 		{
 			var isLit = FindLitTiles(player);
 			DrawInterior(chars, roomLeft, roomTop, isLit);
+		}
+
+		internal bool IsFreeOfArchitecture(Coord target)
+		{
+			return target.X >= 0 && target.Y >= 0 && target.X < Width && target.Y < Height
+				   && _tiles[target.X, target.Y].CanTraverse;
 		}
 
 		private bool[,] FindLitTiles(Coord player)
@@ -58,6 +66,16 @@ namespace Venturer.Core.Environment
 					Screen.AddChar(chars, x + roomLeft, y + roomTop, _tiles[x, y].ToCharacter(isLit[x, y]));
 				}
 			}
+		}
+
+		internal void SetAsSeen(Coord target)
+		{
+			_tiles[target.X, target.Y].SetAsSeen();
+		}
+
+		internal ConsoleColor BackgroundColorAt(Coord c)
+		{
+			return _tiles[c.X, c.Y].ToCharacter(true).BackgroundColor;
 		}
 	}
 }

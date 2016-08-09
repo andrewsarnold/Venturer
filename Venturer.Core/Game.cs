@@ -12,6 +12,7 @@ namespace Venturer.Core
 		public const int WindowWidth = 78;
 		public const int WindowHeight = 24;
 		private readonly Stack<ViewPort> _screenStack;
+		private bool _shouldQuit;
 
 		public string Title { get { return "Venturer.Core"; } }
 
@@ -41,7 +42,74 @@ namespace Venturer.Core
 		/// <returns>True when input sequence should end.</returns>
 		public bool Input(ConsoleKeyInfo key)
 		{
-			return key.Key == ConsoleKey.Escape;
+			// Everything should be handled by screens
+			var shouldReset = false;
+
+			// Foreach screen in stack, top-down:
+			//   Should I handle?
+			//   Should I pass this on down the stack?
+			foreach (var viewPort in _screenStack)
+			{
+				var shouldBubble = viewPort.HandleInput(key);
+
+				// Find out if the game screen wants us to quit
+				var gameScreen = viewPort as GameScreen;
+				if (gameScreen != null)
+				{
+					_shouldQuit = gameScreen.ShouldQuit;
+					if (gameScreen.ShouldReset)
+					{
+						shouldReset = true;
+						break;
+					}
+				}
+
+				if (!shouldBubble)
+				{
+					break;
+				}
+			}
+
+			if (shouldReset)
+			{
+				Initialize();
+			}
+
+			// Write new messages / add new screens
+			AddNewScreens();
+
+			// Destroy expired screens
+			DestroyOldScreens();
+
+			return _shouldQuit;
+		}
+
+		private void DestroyOldScreens()
+		{
+			var top = _screenStack.Peek();
+			do
+			{
+				if (top.ShouldDestroy)
+				{
+					_screenStack.Pop();
+					top = _screenStack.Peek();
+				}
+			} while (top.ShouldDestroy);
+		}
+
+		private void AddNewScreens()
+		{
+			var newScreens = _screenStack.Select(s => s.GetAndClearNewViewPort()).Where(v => v != null).ToList();
+			foreach (var screen in newScreens)
+			{
+				_screenStack.Push(screen);
+			}
+		}
+
+		private void Initialize()
+		{
+			_screenStack.Clear();
+			_screenStack.Push(new GameScreen());
 		}
 
 		public void Dispose()

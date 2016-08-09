@@ -24,7 +24,7 @@ namespace Venturer.Core.Output
 		/// <summary>
 		/// Returns null, or a new viewport that should be displayed on top to be handled immediately.
 		/// </summary>
-		internal abstract ViewPort NewViewPort { get; }
+		internal abstract ViewPort GetAndClearNewViewPort();
 
 		/// <summary>
 		/// Returns whether this screen should be removed from the stack after this input process loop is over.
