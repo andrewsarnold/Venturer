@@ -31,7 +31,7 @@ namespace Venturer.Core.Environment.Tiles
 
 		internal override bool CanTraverse
 		{
-			get { return true; }
+			get { return false; }
 		}
 	}
 }

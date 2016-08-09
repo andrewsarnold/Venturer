@@ -20,7 +20,7 @@ namespace Venturer.Core.Screens
 
 		public GameScreen()
 		{
-			var roomWidth = 20;
+			var roomWidth = 50;
 			var roomHeight = 20;
 
 			var tiles = new Tile[roomWidth, roomHeight];
