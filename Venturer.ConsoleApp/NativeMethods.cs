@@ -17,7 +17,7 @@ namespace Venturer.ConsoleApp
 			[MarshalAs(UnmanagedType.U4)] int flags,
 			IntPtr template);
 
-		[DllImport("kernel32.dll", SetLastError = true)]
+		[DllImport("kernel32.dll", SetLastError = true, EntryPoint = "WriteConsoleOutputW", CharSet = CharSet.Unicode)]
 		internal static extern bool WriteConsoleOutput(
 			SafeFileHandle hConsoleOutput,
 			CharInfo[] lpBuffer,
@@ -35,11 +35,11 @@ namespace Venturer.ConsoleApp
 		public short Y;
 	};
 
-	[StructLayout(LayoutKind.Explicit)]
+	[StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]
 	public struct CharUnion
 	{
 		[FieldOffset(0)]
-		public byte AsciiChar;
+		public char UnicodeChar;
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
