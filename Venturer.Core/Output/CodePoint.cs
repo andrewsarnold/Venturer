@@ -2,16 +2,16 @@
 {
 	public static class CodePoint
 	{
-		public static char Smiley { get { return (char)0x01; } }
+		public static char Smiley { get { return '\u263a'; } }
 
 		public static char TriangleRight { get { return (char)0x10; } }
 		public static char TriangleLeft { get { return (char)0x11; } }
 		public static char TriangleUp { get { return (char)0x1e; } }
 		public static char TriangleDown { get { return (char)0x1f; } }
 
-		public static char LightShade { get { return (char)0xb0; } }
-		public static char MediumShade { get { return (char)0xb1; } }
-		public static char DarkShade { get { return (char)0xb2; } }
+		public static char LightShade { get { return '\u2591'; } }
+		public static char MediumShade { get { return '\u2592'; } }
+		public static char DarkShade { get { return '\u2953'; } }
 
 		public static char BoxNS { get { return (char)0xb3; } }
 		public static char BoxNSW { get { return (char)0xb4; } }

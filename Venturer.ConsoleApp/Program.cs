@@ -50,7 +50,7 @@ namespace Venturer.ConsoleApp
 				{
 					var b = y * Game.WindowWidth + x;
 					buf[b].Attributes = AttributeAsShort(screen.Values[x, y].ForegroundColor, screen.Values[x, y].BackgroundColor);
-					buf[b].Char.AsciiChar = (byte)screen.Values[x, y].Value;
+					buf[b].Char.UnicodeChar = screen.Values[x, y].Value;
 				}
 			}
 
