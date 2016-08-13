@@ -1,7 +1,7 @@
-﻿using System;
-using Venturer.Core.Common;
+﻿using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Environment.Tiles;
+using Venturer.Core.Input;
 using Venturer.Core.Mobs;
 using Venturer.Core.Output;
 
@@ -36,18 +36,18 @@ namespace Venturer.Core.Screens
 			_camera = _player.Position;
 		}
 
-		internal override bool HandleInput(ConsoleKeyInfo key)
+		internal override bool HandleInput(Command command)
 		{
-			switch (key.Key)
+			switch (command)
 			{
-				case ConsoleKey.Escape:
+				case Command.Quit:
 					// menu
 					break;
-				case ConsoleKey.W:
-				case ConsoleKey.A:
-				case ConsoleKey.S:
-				case ConsoleKey.D:
-					DirectionallyInteract(key);
+				case Command.MoveUp:
+				case Command.MoveDown:
+				case Command.MoveLeft:
+				case Command.MoveRight:
+					DirectionallyInteract(command);
 					break;
 			}
 
@@ -75,28 +75,28 @@ namespace Venturer.Core.Screens
 			return newScreen;
 		}
 
-		private void DirectionallyInteract(ConsoleKeyInfo key)
+		private void DirectionallyInteract(Command command)
 		{
-			var target = TargetSpace(key);
-			TryToMove(target, key.Key == ConsoleKey.A || key.Key == ConsoleKey.D);
+			var target = TargetSpace(command);
+			TryToMove(target, command == Command.MoveLeft || command == Command.MoveRight);
 		}
 
-		private Coord TargetSpace(ConsoleKeyInfo key)
+		private Coord TargetSpace(Command command)
 		{
 			var targetX = _player.Position.X;
 			var targetY = _player.Position.Y;
-			switch (key.Key)
+			switch (command)
 			{
-				case ConsoleKey.W:
+				case Command.MoveUp:
 					targetY--;
 					break;
-				case ConsoleKey.A:
+				case Command.MoveLeft:
 					targetX--;
 					break;
-				case ConsoleKey.S:
+				case Command.MoveDown:
 					targetY++;
 					break;
-				case ConsoleKey.D:
+				case Command.MoveRight:
 					targetX++;
 					break;
 			}

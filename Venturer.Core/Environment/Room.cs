@@ -25,9 +25,14 @@ namespace Venturer.Core.Environment
 			{
 				for (var y = 0; y < height; y++)
 				{
-					_tiles[x, y] = r.NextDouble() < 0.8
-						? new FloorTile()
-						: (Tile)new WallTile();
+					_tiles[x, y] =
+						x == 0 ||
+						y == 0 ||
+						x == width - 1 ||
+						y == height - 1 ||
+						r.NextDouble() > 0.9
+							? new WallTile()
+							: (Tile) new FloorTile();
 				}
 			}
 		}

@@ -42,6 +42,8 @@
     <Compile Include="Environment\Tiles\Tile.cs" />
     <Compile Include="Environment\Tiles\WallTile.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Input\Command.cs" />
+    <Compile Include="Input\InputHandler.cs" />
     <Compile Include="Mobs\Mob.cs" />
     <Compile Include="Output\CodePoint.cs" />
     <Compile Include="Output\Glyph.cs" />
