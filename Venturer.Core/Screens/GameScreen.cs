@@ -1,4 +1,5 @@
-﻿using Venturer.Core.Common;
+﻿using System.Collections.Generic;
+using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Input;
@@ -18,7 +19,8 @@ namespace Venturer.Core.Screens
 		public bool ShouldQuit { get; private set; }
 		public bool ShouldReset { get; private set; }
 
-		public GameScreen()
+		public GameScreen(int width, int height, int offsetX, int offsetY)
+			: base(width, height, offsetX, offsetY)
 		{
 			var roomWidth = 50;
 			var roomHeight = 20;
@@ -48,6 +50,9 @@ namespace Venturer.Core.Screens
 				case Command.MoveLeft:
 				case Command.MoveRight:
 					DirectionallyInteract(command);
+					break;
+				case Command.ShowMenu:
+					_newScreen = PauseMenu;
 					break;
 			}
 
@@ -141,6 +146,21 @@ namespace Venturer.Core.Screens
 		internal override bool ShouldDestroy
 		{
 			get { return false; }
+		}
+		
+		private Menu PauseMenu
+		{
+			get
+			{
+				return new Menu(Width, Height, new List<MenuOption>
+				{
+					new MenuOption("Continue", () => { }, false),
+					new MenuOption("Reset", () => { ShouldReset = true; }, true),
+					new MenuOption("Save", () => { }, false),
+					new MenuOption("Quit", () => { ShouldQuit = true; }, true)
+				},
+				() => { });
+			}
 		}
 	}
 }

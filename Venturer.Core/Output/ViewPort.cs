@@ -5,6 +5,34 @@ namespace Venturer.Core.Output
 	internal abstract class ViewPort
 	{
 		/// <summary>
+		/// The output screen width.
+		/// </summary>
+		protected readonly int Width;
+
+		/// <summary>
+		/// The output screen height.
+		/// </summary>
+		protected readonly int Height;
+
+		/// <summary>
+		/// The amount by which the screen will be shifted left in the console.
+		/// </summary>
+		protected readonly int OffsetX;
+
+		/// <summary>
+		/// The amount by which the screen will be shifted down in the console.
+		/// </summary>
+		protected readonly int OffsetY;
+
+		protected ViewPort(int width, int height, int offsetX = 0, int offsetY = 0)
+		{
+			Width = width;
+			Height = height;
+			OffsetX = offsetX;
+			OffsetY = offsetY;
+		}
+
+		/// <summary>
 		///	Handles key input from the console window.
 		/// </summary>
 		/// <param name="key"></param>
