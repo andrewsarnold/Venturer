@@ -35,7 +35,7 @@ namespace Venturer.Core.Output
 		/// <summary>
 		///	Handles key input from the console window.
 		/// </summary>
-		/// <param name="key"></param>
+		/// <param name="command"></param>
 		/// <returns>Returns True if input should continue to bubble down through the screen stack.</returns>
 		internal abstract bool HandleInput(Command command);
 

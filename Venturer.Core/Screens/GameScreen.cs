@@ -70,7 +70,7 @@ namespace Venturer.Core.Screens
 				roomLeft + _player.Position.X,
 				roomTop + _player.Position.Y,
 				_room.BackgroundColorAt(_player.Position));
-			return new Screen(chars, xOffset, yOffset);
+			return new Screen(chars, true, xOffset, yOffset);
 		}
 
 		internal override ViewPort GetAndClearNewViewPort()

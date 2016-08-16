@@ -110,7 +110,7 @@ namespace Venturer.Core
 		private void Initialize()
 		{
 			_screenStack.Clear();
-			_screenStack.Push(new GameScreen(100, 100, 0, 0));
+			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight, 0, 0));
 		}
 
 		public void Dispose()
@@ -143,7 +143,7 @@ namespace Venturer.Core
 						{
 							returnCh[x + screen.XOffset, y + screen.YOffset] = screen.Values[x, y];
 						}
-						else
+						else if (screen.IsOpaque)
 						{
 							returnCh[x + screen.XOffset, y + screen.YOffset] = new Glyph(' ');
 						}
@@ -151,7 +151,7 @@ namespace Venturer.Core
 				}
 			}
 
-			return new Screen(returnCh);
+			return new Screen(returnCh, true);
 		}
 	}
 }
