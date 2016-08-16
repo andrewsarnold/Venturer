@@ -139,13 +139,9 @@ namespace Venturer.Core
 				{
 					foreach (var screen in screens)
 					{
-						if (x < screen.Width && y < screen.Height && screen.Values[x, y] != null && screen.Values[x, y].Value != '\0')
+						if (x < screen.Width && y < screen.Height && screen.Values[x, y].Value != '\0')
 						{
 							returnCh[x + screen.XOffset, y + screen.YOffset] = screen.Values[x, y];
-						}
-						else if (screen.IsOpaque)
-						{
-							returnCh[x + screen.XOffset, y + screen.YOffset] = new Glyph(' ');
 						}
 					}
 				}

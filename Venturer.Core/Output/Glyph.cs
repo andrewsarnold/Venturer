@@ -2,7 +2,7 @@
 
 namespace Venturer.Core.Output
 {
-	public class Glyph
+	public struct Glyph
 	{
 		public readonly ConsoleColor BackgroundColor;
 		public readonly ConsoleColor ForegroundColor;
