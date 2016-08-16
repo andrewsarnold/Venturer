@@ -157,7 +157,7 @@ namespace Venturer.Core.Screens
 		{
 			get
 			{
-				return new Menu(Width, Height, new List<MenuOption>
+				return new Menu(Width, Height, "P A U S E D", new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false),
 					new MenuOption("Reset", () => { ShouldReset = true; }, true),

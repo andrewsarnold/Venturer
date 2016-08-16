@@ -9,19 +9,21 @@ namespace Venturer.Core.Screens
 {
 	internal class Menu : ViewPort
 	{
+		private readonly string _header;
 		private readonly List<MenuOption> _options;
 		private readonly Action _onEscape;
 		private ViewPort _newViewPort;
 		private bool _handled;
 
-		public Menu(int width, int height, List<MenuOption> options, Action onEscape)
-			: base(width, height)
+		public Menu(int width, int height, string header, List<MenuOption> options, Action onEscape)
+			: base(Math.Max(width, header.Length), height)
 		{
 			if (options.Count > 9)
 			{
 				throw new ArgumentException("Too many options");
 			}
 
+			_header = header;
 			_options = options;
 			_onEscape = onEscape;
 		}
@@ -52,7 +54,9 @@ namespace Venturer.Core.Screens
 		internal override Screen ToScreen(int width, int height, int xOffset = 0, int yOffset = 0)
 		{
 			var glyphs = new Glyph[Width, Height];
-			Utilities.TextBox(glyphs, _options.Select((t, i) => string.Format("{0} {1}", i + 1, t.Text)).ToList(), Width, Height);
+			var textLines = new List<string> { _header, " " }
+				.Union(_options.Select((t, i) => string.Format("{0} {1}", i + 1, t.Text)));
+			Utilities.TextBox(glyphs, textLines, Width, Height);
 			return new Screen(glyphs);
 		}
 
