@@ -147,7 +147,7 @@ namespace Venturer.Core
 				}
 			}
 
-			return new Screen(returnCh, true);
+			return new Screen(returnCh);
 		}
 	}
 }

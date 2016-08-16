@@ -6,18 +6,16 @@
 		public readonly int Height;
 		public readonly int XOffset;
 		public readonly int YOffset;
-		public readonly bool IsOpaque;
 
 		public readonly Glyph[,] Values;
 
-		public Screen(Glyph[,] values, bool isOpaque, int xOffset = 0, int yOffset = 0)
+		public Screen(Glyph[,] values, int xOffset = 0, int yOffset = 0)
 		{
 			Width = values.GetLength(0);
 			Height = values.GetLength(1);
 			XOffset = xOffset;
 			YOffset = yOffset;
 			Values = values;
-			IsOpaque = isOpaque;
 		}
 
 		public static void AddChar(Glyph[,] chars, int x, int y, Glyph glyph)

@@ -53,7 +53,7 @@ namespace Venturer.Core.Screens
 		{
 			var glyphs = new Glyph[Width, Height];
 			Utilities.TextBox(glyphs, _options.Select((t, i) => string.Format("{0} {1}", i + 1, t.Text)).ToList(), Width, Height);
-			return new Screen(glyphs, false);
+			return new Screen(glyphs);
 		}
 
 		internal override ViewPort GetAndClearNewViewPort()
