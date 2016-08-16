@@ -51,7 +51,7 @@ namespace Venturer.Core
 			//   Should I pass this on down the stack?
 			foreach (var viewPort in _screenStack)
 			{
-				var shouldBubble = viewPort.HandleInput(InputHandler.Translate(key, InputContext.Game));
+				var shouldBubble = viewPort.HandleInput(InputHandler.Translate(key, viewPort.InputContext));
 
 				// Find out if the game screen wants us to quit
 				var gameScreen = viewPort as GameScreen;

@@ -58,5 +58,10 @@ namespace Venturer.Core.Output
 		/// Returns whether this screen should be removed from the stack after this input process loop is over.
 		/// </summary>
 		internal abstract bool ShouldDestroy { get; }
+
+		/// <summary>
+		/// Returns the input context for this viewport.
+		/// </summary>
+		internal abstract InputContext InputContext { get; }
 	}
 }

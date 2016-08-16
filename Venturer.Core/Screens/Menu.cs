@@ -67,5 +67,10 @@ namespace Venturer.Core.Screens
 		{
 			get { return _handled; }
 		}
+
+		internal override InputContext InputContext
+		{
+			get { return InputContext.Menu; }
+		}
 	}
 }

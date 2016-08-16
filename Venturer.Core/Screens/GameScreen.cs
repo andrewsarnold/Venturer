@@ -147,7 +147,12 @@ namespace Venturer.Core.Screens
 		{
 			get { return false; }
 		}
-		
+
+		internal override InputContext InputContext
+		{
+			get { return InputContext.Game; }
+		}
+
 		private Menu PauseMenu
 		{
 			get
