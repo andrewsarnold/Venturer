@@ -2,7 +2,13 @@
 {
 	public static class CodePoint
 	{
+		public static char Null => '\u0000';
+
 		public static char Smiley => '\u263a';
+
+		public static char Apostrophe => '\u0027';
+		public static char Comma => '\u002c';
+		public static char Period => '\u002e';
 
 		public static char TriangleRight => '\u25b8';
 		public static char TriangleLeft => '\u25c2';

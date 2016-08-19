@@ -25,7 +25,8 @@ namespace Venturer.Core.Environment
 			Width = width;
 			Height = height;
 
-			SetWalls(width, height);
+			SetWalls();
+			SetFloorVisuals();
 			SetDoors();
 		}
 
@@ -50,41 +51,66 @@ namespace Venturer.Core.Environment
 				target.Y < Height;
 		}
 
-		private void SetWalls(int width, int height)
+		private void SetWalls()
 		{
 			var r = new Random();
-			for (var x = 0; x < width; x++)
+			for (var x = 0; x < Width; x++)
 			{
-				for (var y = 0; y < height; y++)
+				for (var y = 0; y < Height; y++)
 				{
 					_tiles[x, y] =
 						!Doors.Any(d => d.Location.Equals(new Coord(x, y))) &&
 						x == 0 ||
 						y == 0 ||
-						x == width - 1 ||
-						y == height - 1 ||
+						x == Width - 1 ||
+						y == Height - 1 ||
 						r.NextDouble() > 0.9
 							? new WallTile()
 							: (Tile) new FloorTile();
 				}
 			}
 
-			SetWallVisuals(width, height);
+			SetWallVisuals();
 		}
 
-		private void SetWallVisuals(int width, int height)
+		private void SetWallVisuals()
 		{
-			for (var x = 0; x < width; x++)
+			for (var x = 0; x < Width; x++)
 			{
-				for (var y = 0; y < height; y++)
+				for (var y = 0; y < Height; y++)
 				{
 					var wallTile = _tiles[x, y] as WallTile;
 					if (wallTile == null) continue;
 					var top = y > 0 && _tiles[x, y - 1] is WallTile;
-					var bottom = y < height - 1 && _tiles[x, y + 1] is WallTile;
+					var bottom = y < Height - 1 && _tiles[x, y + 1] is WallTile;
 					var left = x > 0 && _tiles[x - 1, y] is WallTile;
-					var right = x < width - 1 && _tiles[x + 1, y] is WallTile;
+					var right = x < Width - 1 && _tiles[x + 1, y] is WallTile;
 					wallTile.SetNeighbors(top, right, bottom, left);
+				}
+			}
+		}
+
+		private void SetFloorVisuals()
+		{
+			var r = new Random();
+			for (var x = 0; x < Width; x++)
+			{
+				for (var y = 0; y < Height; y++)
+				{
+					var floorTile = _tiles[x, y] as FloorTile;
+					if (floorTile == null) continue;
+					switch (r.Next(10))
+					{
+						case 0:
+							floorTile.SetRepresentation(CodePoint.Comma);
+							break;
+						case 1:
+							floorTile.SetRepresentation(CodePoint.Period);
+							break;
+						case 2:
+							floorTile.SetRepresentation(CodePoint.Apostrophe);
+							break;
+					}
 				}
 			}
 		}
