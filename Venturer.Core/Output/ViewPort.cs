@@ -14,22 +14,15 @@ namespace Venturer.Core.Output
 		/// </summary>
 		protected readonly int Height;
 
-		/// <summary>
-		/// The amount by which the screen will be shifted left in the console.
-		/// </summary>
-		protected readonly int OffsetX;
-
-		/// <summary>
-		/// The amount by which the screen will be shifted down in the console.
-		/// </summary>
-		protected readonly int OffsetY;
+		private readonly int _offsetX;
+		private readonly int _offsetY;
 
 		protected ViewPort(int width, int height, int offsetX = 0, int offsetY = 0)
 		{
 			Width = width;
 			Height = height;
-			OffsetX = offsetX;
-			OffsetY = offsetY;
+			_offsetX = offsetX;
+			_offsetY = offsetY;
 		}
 
 		/// <summary>

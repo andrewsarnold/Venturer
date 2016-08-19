@@ -29,9 +29,6 @@ namespace Venturer.Core.Environment.Tiles
 						: (bottom ? CodePoint.BoxNS : CodePoint.LowercaseO)));
 		}
 
-		internal override bool CanTraverse
-		{
-			get { return false; }
-		}
+		internal override bool CanTraverse => false;
 	}
 }

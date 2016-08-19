@@ -15,6 +15,9 @@ namespace Venturer.Core.Screens
 		private ViewPort _newViewPort;
 		private bool _handled;
 
+		internal override bool ShouldDestroy => _handled;
+		internal override InputContext InputContext => InputContext.Menu;
+
 		public Menu(int width, int height, string header, List<MenuOption> options, Action onEscape)
 			: base(Math.Max(width, header.Length), height)
 		{
@@ -65,16 +68,6 @@ namespace Venturer.Core.Screens
 			var newViewPort = _newViewPort;
 			_newViewPort = null;
 			return newViewPort;
-		}
-
-		internal override bool ShouldDestroy
-		{
-			get { return _handled; }
-		}
-
-		internal override InputContext InputContext
-		{
-			get { return InputContext.Menu; }
 		}
 	}
 }

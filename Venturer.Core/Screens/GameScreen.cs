@@ -19,6 +19,9 @@ namespace Venturer.Core.Screens
 		public bool ShouldQuit { get; private set; }
 		public bool ShouldReset { get; private set; }
 
+		internal override bool ShouldDestroy => false;
+		internal override InputContext InputContext => InputContext.Game;
+
 		public GameScreen(int width, int height, int offsetX, int offsetY)
 			: base(width, height, offsetX, offsetY)
 		{
@@ -141,16 +144,6 @@ namespace Venturer.Core.Screens
 				: (_camera.Y < _player.Position.Y
 					? new Coord(_camera.X, _camera.Y + 1)
 					: new Coord(_camera.X, _camera.Y - 1));
-		}
-
-		internal override bool ShouldDestroy
-		{
-			get { return false; }
-		}
-
-		internal override InputContext InputContext
-		{
-			get { return InputContext.Game; }
 		}
 
 		private Menu PauseMenu

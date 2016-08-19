@@ -15,7 +15,7 @@ namespace Venturer.Core
 		private readonly Stack<ViewPort> _screenStack;
 		private bool _shouldQuit;
 
-		public string Title { get { return "Venturer.Core"; } }
+		public string Title => "Venturer.Core";
 
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
@@ -25,10 +25,7 @@ namespace Venturer.Core
 			var timer = new Timer(83.3333);
 			timer.Elapsed += (sender, args) =>
 			{
-				if (Draw != null)
-				{
-					Draw();
-				}
+				Draw?.Invoke();
 			};
 			timer.Start();
 

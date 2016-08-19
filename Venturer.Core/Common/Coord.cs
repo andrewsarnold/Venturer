@@ -11,8 +11,8 @@ namespace Venturer.Core.Common
 			Y = y;
 		}
 
-		public int X { get; private set; }
-		public int Y { get; private set; }
+		public int X { get; }
+		public int Y { get; }
 
 		internal static double Distance(Coord c1, Coord c2)
 		{
