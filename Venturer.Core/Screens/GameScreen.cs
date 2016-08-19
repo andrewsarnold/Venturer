@@ -27,7 +27,7 @@ namespace Venturer.Core.Screens
 			: base(width, height)
 		{
 			_player = new Player(new Coord());
-			_level = LevelFactory.GetLevel(width, height);
+			_level = LevelFactory.GetLevel();
 			SetUpRoom(_level.Rooms.First().Value);
 		}
 
@@ -175,7 +175,7 @@ namespace Venturer.Core.Screens
 		{
 			get
 			{
-				return new Menu(Width, Height, "P A U S E D", new List<MenuOption>
+				return new Menu("P A U S E D", new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false),
 					new MenuOption("Reset", () => { ShouldReset = true; }, true),

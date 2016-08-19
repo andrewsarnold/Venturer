@@ -6,16 +6,16 @@ namespace Venturer.Core.Environment
 {
 	internal static class LevelFactory
 	{
-		internal static Level GetLevel(int screenWidth, int screenHeight)
+		internal static Level GetLevel()
 		{
 			return new Level(new Dictionary<string, Room>
 			{
-				{ "start", MakeRoom(20, 10, screenWidth, screenHeight) },
-				{ "end", MakeRoom(30, 25, screenWidth, screenHeight) }
+				{ "start", MakeRoom(20, 10) },
+				{ "end", MakeRoom(30, 25) }
 			});
 		}
 
-		private static Room MakeRoom(int width, int height, int screenWidth, int screenHeight)
+		private static Room MakeRoom(int width, int height)
 		{
 			var doors = new List<Door>
 			{
@@ -24,7 +24,7 @@ namespace Venturer.Core.Environment
 			var room = new Room(width, height, doors);
 			room.OnEnter = () =>
 			{
-				room.CreateNewViewPort(new Menu(screenWidth, screenHeight, "Room menu", new List<MenuOption>
+				room.CreateNewViewPort(new Menu("Room menu", new List<MenuOption>
 				{
 					new MenuOption("one", () => { }, false),
 					new MenuOption("two", () => { }, false)

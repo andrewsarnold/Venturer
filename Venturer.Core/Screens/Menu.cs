@@ -18,8 +18,8 @@ namespace Venturer.Core.Screens
 		internal override bool ShouldDestroy => _handled;
 		internal override InputContext InputContext => InputContext.Menu;
 
-		public Menu(int width, int height, string header, List<MenuOption> options, Action onEscape)
-			: base(Math.Max(width, header.Length), height)
+		public Menu(string header, List<MenuOption> options, Action onEscape)
+			: base(0, 0)
 		{
 			if (options.Count > 9)
 			{
@@ -56,10 +56,10 @@ namespace Venturer.Core.Screens
 
 		internal override Screen ToScreen(int width, int height, int xOffset = 0, int yOffset = 0)
 		{
-			var glyphs = new Glyph[Width, Height];
+			var glyphs = new Glyph[width, height];
 			var textLines = new List<string> { _header, " " }
 				.Union(_options.Select((t, i) => string.Format("{0} {1}", i + 1, t.Text)));
-			Utilities.TextBox(glyphs, textLines, Width, Height);
+			Utilities.TextBox(glyphs, textLines, width, height);
 			return new Screen(glyphs);
 		}
 

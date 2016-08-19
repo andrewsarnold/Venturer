@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Venturer.Core.Common;
 using Venturer.Core.Input;
 using Venturer.Core.Output;
 
@@ -29,7 +30,7 @@ namespace Venturer.Core.Screens
 		{
 			var glyphs = new Glyph[width, height];
 			var continueChar = _stringIndex < _strings.Count - 1 ? CodePoint.TriangleRight : CodePoint.Square;
-			Common.Utilities.TextBox(glyphs, new[] { _strings[_stringIndex] }, width, height, continueChar);
+			Utilities.TextBox(glyphs, new[] { _strings[_stringIndex] }, width, height, continueChar);
 			return new Screen(glyphs);
 		}
 
