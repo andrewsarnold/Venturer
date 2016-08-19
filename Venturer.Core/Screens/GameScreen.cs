@@ -27,7 +27,7 @@ namespace Venturer.Core.Screens
 			: base(width, height, offsetX, offsetY)
 		{
 			_player = new Player(new Coord());
-			_level = LevelFactory.GetLevel();
+			_level = LevelFactory.GetLevel(width, height);
 			SetUpRoom(_level.Rooms.First().Value);
 		}
 
@@ -80,9 +80,15 @@ namespace Venturer.Core.Screens
 
 		private void SetUpRoom(Room room, Coord playerLocation)
 		{
+			_room?.OnExit?.Invoke();
 			_room = room;
 			_player.Position = playerLocation;
 			_camera = _player.Position;
+			_room.ShowNewViewPort += (sender, port) =>
+			{
+				_newScreen = port;
+			};
+			_room.OnEnter?.Invoke();
 		}
 
 		private void DirectionallyInteract(Command command)
