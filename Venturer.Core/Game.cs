@@ -30,7 +30,7 @@ namespace Venturer.Core
 			timer.Start();
 
 			_screenStack = new Stack<ViewPort>();
-			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight, 0, 0));
+			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight));
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Venturer.Core
 		private void Initialize()
 		{
 			_screenStack.Clear();
-			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight, 0, 0));
+			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight));
 		}
 
 		public void Dispose()

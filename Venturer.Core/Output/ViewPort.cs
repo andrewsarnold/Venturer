@@ -14,15 +14,10 @@ namespace Venturer.Core.Output
 		/// </summary>
 		protected readonly int Height;
 
-		private readonly int _offsetX;
-		private readonly int _offsetY;
-
-		protected ViewPort(int width, int height, int offsetX = 0, int offsetY = 0)
+		protected ViewPort(int width, int height)
 		{
 			Width = width;
 			Height = height;
-			_offsetX = offsetX;
-			_offsetY = offsetY;
 		}
 
 		/// <summary>
