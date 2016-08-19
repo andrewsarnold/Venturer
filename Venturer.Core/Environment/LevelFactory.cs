@@ -24,11 +24,15 @@ namespace Venturer.Core.Environment
 			var room = new Room(width, height, doors);
 			room.OnEnter = () =>
 			{
-				room.CreateNewViewPort(new Menu("Room menu", new List<MenuOption>
-				{
-					new MenuOption("one", () => { }, false),
-					new MenuOption("two", () => { }, false)
-				}, () => { }));
+				//room.CreateNewViewPort(new Menu("Room menu", new List<MenuOption>
+				//{
+				//	new MenuOption("one", () => { }, false),
+				//	new MenuOption("two", () => { }, false)
+				//}, () => { }));
+			};
+			room.OnExit = () =>
+			{
+				room.CreateNewViewPort(new MultiTextScreen("you left the room"));
 			};
 			return room;
 		}

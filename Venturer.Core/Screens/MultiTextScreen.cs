@@ -14,6 +14,18 @@ namespace Venturer.Core.Screens
 
 		internal override InputContext InputContext => InputContext.TextBox;
 
+		public MultiTextScreen(string text)
+			: base(0, 0)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+			{
+				throw new ArgumentException("No strings given");
+			}
+
+			_strings = new List<string> { text };
+			_stringIndex = 0;
+		}
+
 		public MultiTextScreen(List<string> strings)
 			: base(0, 0)
 		{
