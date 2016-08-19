@@ -56,6 +56,7 @@
     <Compile Include="Screens\Menu.cs" />
     <Compile Include="Screens\MenuOption.cs" />
     <Compile Include="Common\Utilities.cs" />
+    <Compile Include="Screens\MultiTextScreen.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

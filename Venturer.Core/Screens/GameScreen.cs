@@ -22,8 +22,8 @@ namespace Venturer.Core.Screens
 		internal override bool ShouldDestroy => false;
 		internal override InputContext InputContext => InputContext.Game;
 
-		public GameScreen(int width, int height, int offsetX, int offsetY)
-			: base(width, height, offsetX, offsetY)
+		public GameScreen(int width, int height)
+			: base(width, height)
 		{
 			var roomWidth = 50;
 			var roomHeight = 20;
@@ -56,6 +56,9 @@ namespace Venturer.Core.Screens
 					break;
 				case Command.ShowMenu:
 					_newScreen = PauseMenu;
+					break;
+				case Command.Misc:
+					_newScreen = new MultiTextScreen(new List<string> { "test 1", "test 2" });
 					break;
 			}
 
