@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Venturer.Core.Common;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Output;
@@ -13,28 +15,18 @@ namespace Venturer.Core.Environment
 		public int Width { get; }
 		public int Height { get; }
 
-		internal Room(Tile[,] tiles, int width, int height)
+		internal readonly List<Door> Doors;
+
+		internal Room(int width, int height, List<Door> doors)
 		{
-			_tiles = tiles;
+			Doors = doors;
+			_tiles = new Tile[width, height];
 			_viewDistance = 15;
 			Width = width;
 			Height = height;
 
-			var r = new Random();
-			for (var x = 0; x < width; x++)
-			{
-				for (var y = 0; y < height; y++)
-				{
-					_tiles[x, y] =
-						x == 0 ||
-						y == 0 ||
-						x == width - 1 ||
-						y == height - 1 ||
-						r.NextDouble() > 0.9
-							? new WallTile()
-							: (Tile) new FloorTile();
-				}
-			}
+			SetWalls(width, height);
+			SetDoors();
 		}
 
 		public void Draw(Glyph[,] chars, int roomLeft, int roomTop, Coord player)
@@ -56,6 +48,53 @@ namespace Venturer.Core.Environment
 				target.Y >= 0 &&
 				target.X < Width &&
 				target.Y < Height;
+		}
+
+		private void SetWalls(int width, int height)
+		{
+			var r = new Random();
+			for (var x = 0; x < width; x++)
+			{
+				for (var y = 0; y < height; y++)
+				{
+					_tiles[x, y] =
+						!Doors.Any(d => d.Location.Equals(new Coord(x, y))) &&
+						x == 0 ||
+						y == 0 ||
+						x == width - 1 ||
+						y == height - 1 ||
+						r.NextDouble() > 0.9
+							? new WallTile()
+							: (Tile) new FloorTile();
+				}
+			}
+
+			SetWallVisuals(width, height);
+		}
+
+		private void SetWallVisuals(int width, int height)
+		{
+			for (var x = 0; x < width; x++)
+			{
+				for (var y = 0; y < height; y++)
+				{
+					var wallTile = _tiles[x, y] as WallTile;
+					if (wallTile == null) continue;
+					var top = y > 0 && _tiles[x, y - 1] is WallTile;
+					var bottom = y < height - 1 && _tiles[x, y + 1] is WallTile;
+					var left = x > 0 && _tiles[x - 1, y] is WallTile;
+					var right = x < width - 1 && _tiles[x + 1, y] is WallTile;
+					wallTile.SetNeighbors(top, right, bottom, left);
+				}
+			}
+		}
+
+		private void SetDoors()
+		{
+			foreach (var door in Doors)
+			{
+				_tiles[door.Location.X, door.Location.Y] = new DoorTile();
+			}
 		}
 
 		private bool[,] FindLitTiles(Coord player)

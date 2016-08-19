@@ -2,7 +2,7 @@
 
 namespace Venturer.Core.Common
 {
-	public struct Coord
+	public struct Coord : IEquatable<Coord>
 	{
 		public Coord(int x, int y)
 			: this()
@@ -17,6 +17,11 @@ namespace Venturer.Core.Common
 		internal static double Distance(Coord c1, Coord c2)
 		{
 			return Math.Sqrt(Math.Pow(c2.X - c1.X, 2) + Math.Pow(c2.Y - c1.Y, 2));
+		}
+
+		public bool Equals(Coord other)
+		{
+			return other.X == X && other.Y == Y;
 		}
 
 		public override string ToString()

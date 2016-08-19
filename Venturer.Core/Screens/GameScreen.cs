@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Venturer.Core.Common;
 using Venturer.Core.Environment;
-using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Input;
 using Venturer.Core.Mobs;
 using Venturer.Core.Output;
@@ -14,6 +14,7 @@ namespace Venturer.Core.Screens
 		private Room _room;
 		private Coord _camera;
 		private ViewPort _newScreen;
+		private readonly Level _level;
 		private readonly Player _player;
 
 		public bool ShouldQuit { get; private set; }
@@ -25,20 +26,9 @@ namespace Venturer.Core.Screens
 		public GameScreen(int width, int height, int offsetX, int offsetY)
 			: base(width, height, offsetX, offsetY)
 		{
-			var roomWidth = 50;
-			var roomHeight = 20;
-
-			var tiles = new Tile[roomWidth, roomHeight];
-			for (var y = 0; y < roomHeight; y++)
-			{
-				for (var x = 0; x < roomWidth; x++)
-				{
-					tiles[x, y] = new FloorTile();
-				}
-			}
-			_room = new Room(tiles, roomWidth, roomHeight);
-			_player = new Player(new Coord(_room.Width / 2, _room.Height / 2));
-			_camera = _player.Position;
+			_player = new Player(new Coord());
+			_level = LevelFactory.GetLevel();
+			SetUpRoom(_level.Rooms.First().Value);
 		}
 
 		internal override bool HandleInput(Command command)
@@ -83,6 +73,18 @@ namespace Venturer.Core.Screens
 			return newScreen;
 		}
 
+		private void SetUpRoom(Room room)
+		{
+			SetUpRoom(room, new Coord(room.Width / 2, room.Height / 2));
+		}
+
+		private void SetUpRoom(Room room, Coord playerLocation)
+		{
+			_room = room;
+			_player.Position = playerLocation;
+			_camera = _player.Position;
+		}
+
 		private void DirectionallyInteract(Command command)
 		{
 			var target = TargetSpace(command);
@@ -114,6 +116,14 @@ namespace Venturer.Core.Screens
 
 		private Direction TryToMove(Coord target, bool movedHorizontally)
 		{
+			// Is there a door here?
+			var doorHere = _room.Doors.SingleOrDefault(d => d.Location.Equals(target));
+			if (doorHere != null)
+			{
+				SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
+				return Direction.None;
+			}
+
 			var couldMove = _room.IsInRoom(target) && _room.IsFreeOfArchitecture(target);
 			if (couldMove)
 			{

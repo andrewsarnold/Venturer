@@ -6,7 +6,7 @@ namespace Venturer.Core.Environment.Tiles
 	public class WallTile : Tile
 	{
 		public WallTile()
-			: base(CodePoint.MediumShade, ConsoleColor.White, ConsoleColor.Gray, ConsoleColor.Gray, ConsoleColor.DarkGray)
+			: base(CodePoint.MediumShade, ConsoleColor.Gray, ConsoleColor.DarkGray, ConsoleColor.DarkGray, ConsoleColor.Black)
 		{
 		}
 
@@ -19,14 +19,14 @@ namespace Venturer.Core.Environment.Tiles
 						: (bottom ? CodePoint.BoxNSE : CodePoint.BoxNE))
 					: (left
 						? (bottom ? CodePoint.BoxNSW : CodePoint.BoxNW)
-						: CodePoint.BoxNS))
+						: (bottom ? CodePoint.BoxNS : CodePoint.BoxN)))
 				: (right
 					? (left
 						? (bottom ? CodePoint.BoxSEW : CodePoint.BoxEW)
-						: (bottom ? CodePoint.BoxSE : CodePoint.BoxEW))
+						: (bottom ? CodePoint.BoxSE : CodePoint.BoxE))
 					: (left
-						? (bottom ? CodePoint.BoxSW : CodePoint.BoxEW)
-						: (bottom ? CodePoint.BoxNS : CodePoint.LowercaseO)));
+						? (bottom ? CodePoint.BoxSW : CodePoint.BoxW)
+						: (bottom ? CodePoint.BoxS : CodePoint.LowercaseO)));
 		}
 
 		internal override bool CanTraverse => false;
