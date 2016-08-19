@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Venturer.Core.Common;
 
 namespace Venturer.Core.Environment
 {
@@ -15,7 +16,11 @@ namespace Venturer.Core.Environment
 
 		private static Room MakeRoom(int width, int height)
 		{
-			return new Room(width, height);
+			var doors = new List<Door>
+			{
+				new Door(new Coord(0, 3), "end", new Coord(28, 2))
+			};
+			return new Room(width, height, doors);
 		}
 	}
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Venturer.Core.Common;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Output;
@@ -13,14 +15,39 @@ namespace Venturer.Core.Environment
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
-		internal Room(int width, int height)
+		internal readonly List<Door> Doors;
+
+		internal Room(int width, int height, List<Door> doors)
 		{
+			Doors = doors;
 			_tiles = new Tile[width, height];
 			_viewDistance = 15;
 			Width = width;
 			Height = height;
 
 			SetWalls(width, height);
+			SetDoors();
+		}
+
+		public void Draw(Glyph[,] chars, int roomLeft, int roomTop, Coord player)
+		{
+			var isLit = FindLitTiles(player);
+			DrawInterior(chars, roomLeft, roomTop, isLit);
+		}
+
+		internal bool IsFreeOfArchitecture(Coord target)
+		{
+			return target.X >= 0 && target.Y >= 0 && target.X < Width && target.Y < Height
+				   && _tiles[target.X, target.Y].CanTraverse;
+		}
+
+		internal bool IsInRoom(Coord target)
+		{
+			return
+				target.X >= 0 &&
+				target.Y >= 0 &&
+				target.X < Width &&
+				target.Y < Height;
 		}
 
 		private void SetWalls(int width, int height)
@@ -31,6 +58,7 @@ namespace Venturer.Core.Environment
 				for (var y = 0; y < height; y++)
 				{
 					_tiles[x, y] =
+						!Doors.Any(d => d.Location.Equals(new Coord(x, y))) &&
 						x == 0 ||
 						y == 0 ||
 						x == width - 1 ||
@@ -61,25 +89,12 @@ namespace Venturer.Core.Environment
 			}
 		}
 
-		public void Draw(Glyph[,] chars, int roomLeft, int roomTop, Coord player)
+		private void SetDoors()
 		{
-			var isLit = FindLitTiles(player);
-			DrawInterior(chars, roomLeft, roomTop, isLit);
-		}
-
-		internal bool IsFreeOfArchitecture(Coord target)
-		{
-			return target.X >= 0 && target.Y >= 0 && target.X < Width && target.Y < Height
-				   && _tiles[target.X, target.Y].CanTraverse;
-		}
-
-		internal bool IsInRoom(Coord target)
-		{
-			return
-				target.X >= 0 &&
-				target.Y >= 0 &&
-				target.X < Width &&
-				target.Y < Height;
+			foreach (var door in Doors)
+			{
+				_tiles[door.Location.X, door.Location.Y] = new DoorTile();
+			}
 		}
 
 		private bool[,] FindLitTiles(Coord player)

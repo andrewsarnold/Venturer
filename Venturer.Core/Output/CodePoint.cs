@@ -27,6 +27,8 @@
 
 		public static char FullBlock { get { return '\u2588'; } }
 		
+		public static char CapitalPi { get { return '\u03a0'; } }
+		
 		public static char LowercaseO { get { return 'o'; } }
 	}
 }
