@@ -8,6 +8,7 @@
 		public static char TriangleLeft => '\u25c2';
 		public static char TriangleUp => '\u25b4';
 		public static char TriangleDown => '\u25be';
+		public static char Square => '\u25a0';
 
 		public static char LightShade => '\u2591';
 		public static char MediumShade => '\u2592';
