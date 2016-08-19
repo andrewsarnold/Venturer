@@ -13,6 +13,10 @@
 		public static char MediumShade => '\u2592';
 		public static char DarkShade => '\u2953';
 
+		public static char BoxN => '\u2575';
+		public static char BoxS => '\u2577';
+		public static char BoxE => '\u2576';
+		public static char BoxW => '\u2574';
 		public static char BoxNS => '\u2502';
 		public static char BoxNSW => '\u2524';
 		public static char BoxSW => '\u2510';
