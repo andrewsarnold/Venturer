@@ -36,6 +36,8 @@
   <ItemGroup>
     <Compile Include="Common\Coord.cs" />
     <Compile Include="Environment\Direction.cs" />
+    <Compile Include="Environment\Level.cs" />
+    <Compile Include="Environment\LevelFactory.cs" />
     <Compile Include="Environment\Room.cs" />
     <Compile Include="Environment\Shadowcaster.cs" />
     <Compile Include="Environment\Tiles\FloorTile.cs" />

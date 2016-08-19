@@ -13,13 +13,18 @@ namespace Venturer.Core.Environment
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
-		internal Room(Tile[,] tiles, int width, int height)
+		internal Room(int width, int height)
 		{
-			_tiles = tiles;
+			_tiles = new Tile[width, height];
 			_viewDistance = 15;
 			Width = width;
 			Height = height;
 
+			SetWalls(width, height);
+		}
+
+		private void SetWalls(int width, int height)
+		{
 			var r = new Random();
 			for (var x = 0; x < width; x++)
 			{
@@ -33,6 +38,25 @@ namespace Venturer.Core.Environment
 						r.NextDouble() > 0.9
 							? new WallTile()
 							: (Tile) new FloorTile();
+				}
+			}
+
+			SetWallVisuals(width, height);
+		}
+
+		private void SetWallVisuals(int width, int height)
+		{
+			for (var x = 0; x < width; x++)
+			{
+				for (var y = 0; y < height; y++)
+				{
+					var wallTile = _tiles[x, y] as WallTile;
+					if (wallTile == null) continue;
+					var top = y > 0 && _tiles[x, y - 1] is WallTile;
+					var bottom = y < height - 1 && _tiles[x, y + 1] is WallTile;
+					var left = x > 0 && _tiles[x - 1, y] is WallTile;
+					var right = x < width - 1 && _tiles[x + 1, y] is WallTile;
+					wallTile.SetNeighbors(top, right, bottom, left);
 				}
 			}
 		}

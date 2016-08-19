@@ -1,4 +1,5 @@
-﻿using Venturer.Core.Common;
+﻿using System.Linq;
+using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Input;
@@ -10,6 +11,7 @@ namespace Venturer.Core.Screens
 	internal class GameScreen : ViewPort
 	{
 		private const int MaxCameraDistance = 5;
+		private Level _level;
 		private Room _room;
 		private Coord _camera;
 		private ViewPort _newScreen;
@@ -20,18 +22,8 @@ namespace Venturer.Core.Screens
 
 		public GameScreen()
 		{
-			var roomWidth = 50;
-			var roomHeight = 20;
-
-			var tiles = new Tile[roomWidth, roomHeight];
-			for (var y = 0; y < roomHeight; y++)
-			{
-				for (var x = 0; x < roomWidth; x++)
-				{
-					tiles[x, y] = new FloorTile();
-				}
-			}
-			_room = new Room(tiles, roomWidth, roomHeight);
+			_level = LevelFactory.GetLevel();
+			_room = _level.Rooms.First().Value;
 			_player = new Player(new Coord(_room.Width / 2, _room.Height / 2));
 			_camera = _player.Position;
 		}

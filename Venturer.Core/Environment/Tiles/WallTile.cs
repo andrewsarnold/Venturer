@@ -6,7 +6,7 @@ namespace Venturer.Core.Environment.Tiles
 	public class WallTile : Tile
 	{
 		public WallTile()
-			: base(CodePoint.MediumShade, ConsoleColor.White, ConsoleColor.Gray, ConsoleColor.Gray, ConsoleColor.DarkGray)
+			: base(CodePoint.MediumShade, ConsoleColor.Gray, ConsoleColor.DarkGray, ConsoleColor.DarkGray, ConsoleColor.Black)
 		{
 		}
 
