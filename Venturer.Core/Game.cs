@@ -15,7 +15,7 @@ namespace Venturer.Core
 		private readonly Stack<ViewPort> _screenStack;
 		private bool _shouldQuit;
 
-		public string Title { get { return "Venturer.Core"; } }
+		public string Title => "Venturer.Core";
 
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
@@ -25,15 +25,12 @@ namespace Venturer.Core
 			var timer = new Timer(83.3333);
 			timer.Elapsed += (sender, args) =>
 			{
-				if (Draw != null)
-				{
-					Draw();
-				}
+				Draw?.Invoke();
 			};
 			timer.Start();
 
 			_screenStack = new Stack<ViewPort>();
-			_screenStack.Push(new GameScreen());
+			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight, 0, 0));
 		}
 
 		/// <summary>
@@ -51,7 +48,7 @@ namespace Venturer.Core
 			//   Should I pass this on down the stack?
 			foreach (var viewPort in _screenStack)
 			{
-				var shouldBubble = viewPort.HandleInput(InputHandler.Translate(key));
+				var shouldBubble = viewPort.HandleInput(InputHandler.Translate(key, viewPort.InputContext));
 
 				// Find out if the game screen wants us to quit
 				var gameScreen = viewPort as GameScreen;
@@ -110,7 +107,7 @@ namespace Venturer.Core
 		private void Initialize()
 		{
 			_screenStack.Clear();
-			_screenStack.Push(new GameScreen());
+			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight, 0, 0));
 		}
 
 		public void Dispose()
@@ -139,13 +136,9 @@ namespace Venturer.Core
 				{
 					foreach (var screen in screens)
 					{
-						if (x < screen.Width && y < screen.Height && screen.Values[x, y] != null && screen.Values[x, y].Value != '\0')
+						if (x < screen.Width && y < screen.Height && screen.Values[x, y].Value != '\0')
 						{
 							returnCh[x + screen.XOffset, y + screen.YOffset] = screen.Values[x, y];
-						}
-						else
-						{
-							returnCh[x + screen.XOffset, y + screen.YOffset] = new Glyph(' ');
 						}
 					}
 				}

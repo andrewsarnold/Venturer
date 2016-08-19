@@ -12,8 +12,8 @@ namespace Venturer.Core.Environment
 		private readonly int _viewDistance;
 		private readonly Tile[,] _tiles;
 
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+		public int Width { get; }
+		public int Height { get; }
 
 		internal readonly List<Door> Doors;
 

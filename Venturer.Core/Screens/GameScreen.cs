@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Input;
@@ -19,7 +20,11 @@ namespace Venturer.Core.Screens
 		public bool ShouldQuit { get; private set; }
 		public bool ShouldReset { get; private set; }
 
-		public GameScreen()
+		internal override bool ShouldDestroy => false;
+		internal override InputContext InputContext => InputContext.Game;
+
+		public GameScreen(int width, int height, int offsetX, int offsetY)
+			: base(width, height, offsetX, offsetY)
 		{
 			_player = new Player(new Coord());
 			_level = LevelFactory.GetLevel();
@@ -38,6 +43,9 @@ namespace Venturer.Core.Screens
 				case Command.MoveLeft:
 				case Command.MoveRight:
 					DirectionallyInteract(command);
+					break;
+				case Command.ShowMenu:
+					_newScreen = PauseMenu;
 					break;
 			}
 
@@ -148,9 +156,19 @@ namespace Venturer.Core.Screens
 					: new Coord(_camera.X, _camera.Y - 1));
 		}
 
-		internal override bool ShouldDestroy
+		private Menu PauseMenu
 		{
-			get { return false; }
+			get
+			{
+				return new Menu(Width, Height, "P A U S E D", new List<MenuOption>
+				{
+					new MenuOption("Continue", () => { }, false),
+					new MenuOption("Reset", () => { ShouldReset = true; }, true),
+					new MenuOption("Save", () => { }, false),
+					new MenuOption("Quit", () => { ShouldQuit = true; }, true)
+				},
+				() => { });
+			}
 		}
 	}
 }
