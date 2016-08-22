@@ -29,7 +29,7 @@ namespace Venturer.Core.Screens
 			_gameData = gameData;
 			_player = new Player(new Coord());
 			_level = _gameData.LevelFactory.GetLevel();
-			SetUpRoom(_level.Rooms.First().Value);
+			SetUpRoom(_level.FirstRoom);
 		}
 
 		internal override bool HandleInput(Command command)
@@ -41,7 +41,7 @@ namespace Venturer.Core.Screens
 				case Command.MoveLeft:
 				case Command.MoveRight:
 					DirectionallyInteract(command);
-					break;
+					return false;
 				case Command.ShowMenu:
 					_newScreen = PauseMenu;
 					break;
@@ -54,6 +54,11 @@ namespace Venturer.Core.Screens
 						"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 					});
 					break;
+			}
+
+			if (_room.DoneExiting)
+			{
+				SetUpRoom(_level.Rooms[_room.DoorExited.TargetRoom], _room.DoorExited.TargetCoord);
 			}
 
 			// GameScreen should be the last thing in the stack.
@@ -82,12 +87,11 @@ namespace Venturer.Core.Screens
 
 		private void SetUpRoom(Room room)
 		{
-			SetUpRoom(room, new Coord(room.Width / 2, room.Height / 2));
+			SetUpRoom(room, room.StartingLocation);
 		}
 
 		private void SetUpRoom(Room room, Coord playerLocation)
 		{
-			_room?.OnExit?.Invoke();
 			_room = room;
 			_player.Position = playerLocation;
 			_camera = _player.Position;
@@ -133,7 +137,14 @@ namespace Venturer.Core.Screens
 			var doorHere = _room.Doors.SingleOrDefault(d => d.Location.Equals(target));
 			if (doorHere != null)
 			{
-				SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
+				if (_room.OnExit != null)
+				{
+					_room.OnExit(doorHere);
+				}
+				else
+				{
+					SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
+				}
 				return;
 			}
 

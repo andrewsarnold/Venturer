@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Venturer.Core.Common;
+﻿using System.Linq;
 using Venturer.Core.Environment;
-using Venturer.Core.Screens;
+using Venturer.Data.Rooms;
 
 namespace Venturer.Data
 {
@@ -9,25 +8,8 @@ namespace Venturer.Data
 	{
 		public Level GetLevel()
 		{
-			return new Level(new Dictionary<string, Room>
-			{
-				{ "start", MakeRoom(20, 10) },
-				{ "end", MakeRoom(30, 25) }
-			});
-		}
-
-		private static Room MakeRoom(int width, int height)
-		{
-			var doors = new List<Door>
-			{
-				new Door(new Coord(0, 3), "end", new Coord(28, 2))
-			};
-			var room = new Room(width, height, doors);
-			room.OnExit = () =>
-			{
-				room.CreateNewViewPort(new MultiTextScreen("you left the room"));
-			};
-			return room;
+			var rooms = new IRoomFactory[] { new Room1(), new Room2() }.Select(r => r.MakeRoom()).ToDictionary(r => r.Name);
+			return new Level(rooms, "start");
 		}
 	}
 }
