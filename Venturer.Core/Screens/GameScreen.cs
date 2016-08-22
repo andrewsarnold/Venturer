@@ -176,7 +176,10 @@ namespace Venturer.Core.Screens
 				return new Menu("P A U S E D", new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false),
-					new MenuOption("Save", () => { }, false),
+					new MenuOption("Save", () =>
+					{
+					    _newScreen = CommonMenus.SaveSlotPicker("Save game", SaveGame, () => { });
+					}, false),
 					new MenuOption("Quit", () =>
 					{
 						_newScreen = new MainMenu(_gameData);
@@ -186,5 +189,11 @@ namespace Venturer.Core.Screens
 				() => { });
 			}
 		}
+
+	    private void SaveGame(int saveSlot)
+	    {
+	        _gameData.SaveGame(saveSlot);
+            _newScreen = new MultiTextScreen("Game saved to slot " + saveSlot);
+	    }
 	}
 }

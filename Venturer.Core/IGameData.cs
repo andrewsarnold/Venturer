@@ -10,5 +10,6 @@ namespace Venturer.Core
 		ILevelFactory LevelFactory { get; }
 
 		void LoadGame(int slot);
+		void SaveGame(int slot);
 	}
 }
