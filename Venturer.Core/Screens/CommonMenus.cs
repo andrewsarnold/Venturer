@@ -9,10 +9,10 @@ namespace Venturer.Core.Screens
         {
             return new Menu(header, new List<MenuOption>
             {
-                new MenuOption("Slot 1", () => onSelectAction(1), false),
-                new MenuOption("Slot 2", () => onSelectAction(2), false),
-                new MenuOption("Slot 3", () => onSelectAction(3), false),
-                new MenuOption("Back", () => { }, false)
+                new MenuOption("Slot 1", () => onSelectAction(1), false, true),
+                new MenuOption("Slot 2", () => onSelectAction(2), false, true),
+                new MenuOption("Slot 3", () => onSelectAction(3), false, true),
+                new MenuOption("Back", () => { }, false, true)
             }, onEscapeAction);
         }
     }

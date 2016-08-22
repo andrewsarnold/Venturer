@@ -175,16 +175,16 @@ namespace Venturer.Core.Screens
 			{
 				return new Menu("P A U S E D", new List<MenuOption>
 				{
-					new MenuOption("Continue", () => { }, false),
+					new MenuOption("Continue", () => { }, false, true),
 					new MenuOption("Save", () =>
 					{
 					    _newScreen = CommonMenus.SaveSlotPicker("Save game", SaveGame, () => { });
-					}, false),
+					}, false, false),
 					new MenuOption("Quit", () =>
 					{
 						_newScreen = new MainMenu(_gameData);
 						_shouldDestroy = true;
-					}, true)
+					}, true, true)
 				},
 				() => { });
 			}
