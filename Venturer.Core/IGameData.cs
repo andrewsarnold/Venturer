@@ -6,5 +6,7 @@ namespace Venturer.Core
 	{
 		string GameTitle { get; }
 		ILevelFactory LevelFactory { get; }
+
+		void LoadGame(int slot);
 	}
 }

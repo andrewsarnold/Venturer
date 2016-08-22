@@ -66,6 +66,9 @@ namespace Venturer.Core
 			// Destroy expired screens
 			DestroyOldScreens();
 
+			// To be moved elsewhere
+			UpdateTitle?.Invoke(this, null);
+
 			return _shouldQuit;
 		}
 

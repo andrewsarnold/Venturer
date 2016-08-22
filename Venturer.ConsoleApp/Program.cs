@@ -30,6 +30,7 @@ namespace Venturer.ConsoleApp
 				Console.CursorVisible = false;
 
 				//game.Draw += () => { Write(game.ToScreen(), h); };
+				game.UpdateTitle += (sender, args) => Console.Title = game.Title;
 
 				bool shouldQuit;
 				do

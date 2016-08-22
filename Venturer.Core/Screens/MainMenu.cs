@@ -10,9 +10,9 @@ namespace Venturer.Core.Screens
 	{
 		private readonly IGameData _gameData;
 		private readonly List<Tuple<string, Action>> _options;
+		private ViewPort _newScreen;
 		private int _selectedIndex;
 		private bool _shouldDestroy;
-		private bool _shouldNew;
 		private bool _shouldQuit;
 
 		public MainMenu(IGameData gameData, int width, int height)
@@ -23,11 +23,17 @@ namespace Venturer.Core.Screens
 			{
 				new Tuple<string, Action>("New game", () =>
 				{
-					_shouldNew = true;
+					_newScreen = new GameScreen(_gameData, Width, Height);
 					_shouldDestroy = true;
 				}),
 				new Tuple<string, Action>("Continue", () => { }),
-				new Tuple<string, Action>("Load", () => { }),
+				new Tuple<string, Action>("Load", () => { _newScreen = new Menu("Load game", new List<MenuOption>
+				{
+					new MenuOption("Slot 1", () => LoadGame(1), false),
+					new MenuOption("Slot 2", () => LoadGame(2), false),
+					new MenuOption("Slot 3", () => LoadGame(3), false),
+					new MenuOption("Back", () => { }, false)
+				}, () => { }); }),
 				new Tuple<string, Action>("Quit", () => { _shouldQuit = true; })
 			};
 			_selectedIndex = 0;
@@ -68,13 +74,18 @@ namespace Venturer.Core.Screens
 
 		internal override ViewPort GetAndClearNewViewPort()
 		{
-			return _shouldNew
-				? new GameScreen(_gameData, Width, Height)
-				: null;
+			return _newScreen;
 		}
 
 		internal override bool ShouldDestroy => _shouldDestroy;
 		internal override InputContext InputContext => InputContext.MainMenu;
 		internal override bool ShouldQuit => _shouldQuit;
+
+		private void LoadGame(int slotId)
+		{
+			_gameData.LoadGame(slotId);
+			_newScreen = new GameScreen(_gameData, Width, Height);
+			_shouldDestroy = true;
+		}
 	}
 }
