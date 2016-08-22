@@ -8,15 +8,17 @@ namespace Venturer.Core.Screens
 {
 	internal class MainMenu : ViewPort
 	{
+		private readonly IGameData _gameData;
 		private readonly List<Tuple<string, Action>> _options;
 		private int _selectedIndex;
 		private bool _shouldDestroy;
 		private bool _shouldNew;
 		private bool _shouldQuit;
 
-		public MainMenu(int width, int height)
+		public MainMenu(IGameData gameData, int width, int height)
 			: base(width, height)
 		{
+			_gameData = gameData;
 			_options = new List<Tuple<string, Action>>
 			{
 				new Tuple<string, Action>("New game", () =>
@@ -67,7 +69,7 @@ namespace Venturer.Core.Screens
 		internal override ViewPort GetAndClearNewViewPort()
 		{
 			return _shouldNew
-				? new GameScreen(Width, Height)
+				? new GameScreen(_gameData, Width, Height)
 				: null;
 		}
 

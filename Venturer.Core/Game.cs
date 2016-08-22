@@ -10,18 +10,20 @@ namespace Venturer.Core
 {
 	public class Game : IDisposable
 	{
+		private readonly IGameData _gameData;
 		public const int WindowWidth = 78;
 		public const int WindowHeight = 24;
 		private readonly Stack<ViewPort> _screenStack;
 		private bool _shouldQuit;
 
-		public string Title => "Venturer.Core";
+		public string Title => _gameData.GameTitle;
 
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
 
-		public Game()
+		public Game(IGameData gameData)
 		{
+			_gameData = gameData;
 			var timer = new Timer(83.3333);
 			timer.Elapsed += (sender, args) =>
 			{
@@ -30,7 +32,7 @@ namespace Venturer.Core
 			timer.Start();
 
 			_screenStack = new Stack<ViewPort>();
-			_screenStack.Push(new MainMenu(WindowWidth, WindowHeight));
+			_screenStack.Push(new MainMenu(_gameData, WindowWidth, WindowHeight));
 		}
 
 		/// <summary>

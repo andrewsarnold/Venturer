@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Win32.SafeHandles;
 using Venturer.Core;
 using Venturer.Core.Output;
+using Venturer.Data;
 
 namespace Venturer.ConsoleApp
 {
@@ -20,7 +21,7 @@ namespace Venturer.ConsoleApp
 				return;
 			}
 
-			using (var game = new Game())
+			using (var game = new Game(new GameData()))
 			{
 				Console.SetWindowSize(Game.WindowWidth, Game.WindowHeight);
 				Console.SetBufferSize(Game.WindowWidth, Game.WindowHeight);
