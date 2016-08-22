@@ -19,6 +19,8 @@ namespace Venturer.Core
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
 
+		public event EventHandler<string> UpdateTitle;
+
 		public Game(IGameData gameData)
 		{
 			_gameData = gameData;
@@ -63,6 +65,9 @@ namespace Venturer.Core
 
 			// Destroy expired screens
 			DestroyOldScreens();
+
+			// To be moved elsewhere
+			UpdateTitle?.Invoke(this, _gameData.GameTitle);
 
 			return _shouldQuit;
 		}
