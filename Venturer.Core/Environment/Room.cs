@@ -11,6 +11,7 @@ namespace Venturer.Core.Environment
 		private readonly int _viewDistance;
 		private readonly Tile[,] _tiles;
 
+		public string Name { get; }
 		public int Width { get; }
 		public int Height { get; }
 		public Coord StartingLocation;
@@ -18,12 +19,15 @@ namespace Venturer.Core.Environment
 		internal readonly List<Door> Doors;
 
 		public Action OnEnter;
-		public Action OnExit;
+		public Action<Door> OnExit;
+		public bool DoneExiting;
+		public Door DoorExited;
 
 		internal event EventHandler<ViewPort> ShowNewViewPort;
 
-		public Room(int width, int height, Tile[,] tiles, List<Door> doors)
+		public Room(string name, int width, int height, Tile[,] tiles, List<Door> doors)
 		{
+			Name = name;
 			Doors = doors;
 			_tiles = tiles;
 			_viewDistance = 15;
