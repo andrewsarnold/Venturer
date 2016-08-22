@@ -55,6 +55,8 @@ namespace Venturer.Core.Screens
 		{
 			var glyphs = new Glyph[width, height];
 
+			Utilities.WriteTextLine(glyphs, new Coord(4, 2), Utilities.Stylize(_gameData.GameTitle));
+
 			var startY = height / 2 - _options.Count / 2;
 			for (var y = 0; y < _options.Count; y++)
 			{

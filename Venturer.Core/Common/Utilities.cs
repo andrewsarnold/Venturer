@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Venturer.Core.Output;
 
@@ -55,6 +56,16 @@ namespace Venturer.Core.Common
 			{
 				chars[startLocation.X + x, startLocation.Y] = new Glyph(x >= text.Length ? ' ' : text[x]);
 			}
+		}
+
+		internal static string Stylize(string text)
+		{
+			var chars = text.ToUpper(CultureInfo.CurrentCulture).ToCharArray().ToList();
+			for (var i = 1; i < chars.Count; i += 2)
+			{
+				chars.Insert(i, ' ');
+			}
+			return string.Join("", chars);
 		}
 
 		private static List<string> SplitString(string text, int maxWidth)

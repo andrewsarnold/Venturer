@@ -26,12 +26,12 @@ namespace Venturer.ConsoleApp
 			{
 				Console.SetWindowSize(gameData.WindowWidth, gameData.WindowHeight);
 				Console.SetBufferSize(gameData.WindowWidth, gameData.WindowHeight);
-				Console.Title = game.Title;
+				Console.Title = game.WindowTitle;
 				Console.OutputEncoding = Encoding.Unicode;
 				Console.CursorVisible = false;
 
 				//game.Draw += () => { Write(game.ToScreen(), h); };
-				game.UpdateTitle += (sender, args) => Console.Title = game.Title;
+				game.UpdateTitle += (sender, args) => Console.Title = game.WindowTitle;
 
 				bool shouldQuit;
 				do

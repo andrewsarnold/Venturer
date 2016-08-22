@@ -165,7 +165,7 @@ namespace Venturer.Core.Screens
 		{
 			get
 			{
-				return new Menu("P A U S E D", new List<MenuOption>
+				return new Menu(Utilities.Stylize("Paused"), new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false, true),
 					new MenuOption("Save", () =>
