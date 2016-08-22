@@ -15,8 +15,8 @@ namespace Venturer.Core.Screens
 		private bool _shouldNew;
 		private bool _shouldQuit;
 
-		public MainMenu(IGameData gameData, int width, int height)
-			: base(width, height)
+		public MainMenu(IGameData gameData)
+			: base(gameData.WindowWidth, gameData.WindowHeight)
 		{
 			_gameData = gameData;
 			_options = new List<Tuple<string, Action>>
