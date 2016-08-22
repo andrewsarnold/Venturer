@@ -4,9 +4,9 @@ using Venturer.Core.Environment;
 namespace Venturer.Data
 {
 	public class GameData : IGameData
-    {
-	    public int WindowWidth => 76;
-	    public int WindowHeight => 24;
+	{
+		public int WindowWidth => 76;
+		public int WindowHeight => 24;
 		public string GameTitle { get; private set; }
 		public ILevelFactory LevelFactory { get; }
 
@@ -21,8 +21,8 @@ namespace Venturer.Data
 			GameTitle = $"Loaded from slot {slot}";
 		}
 
-	    public void SaveGame(int slot)
-	    {
-	    }
-    }
+		public void SaveGame(int slot)
+		{
+		}
+	}
 }

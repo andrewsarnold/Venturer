@@ -27,6 +27,11 @@ namespace Venturer.Core.Screens
 				throw new ArgumentException("Too many options");
 			}
 
+			if (options.Count < 1)
+			{
+				throw new ArgumentException("Not enough options");
+			}
+
 			_header = header;
 			_options = options;
 			_onEscape = onEscape;

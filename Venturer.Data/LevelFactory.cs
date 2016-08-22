@@ -25,10 +25,11 @@ namespace Venturer.Data
 				new Door(new Coord(0, 3), "end", new Coord(28, 2))
 			};
 
-		    var items = new List<Item>
-		    {
-                new Item("key", '\u00a5', ConsoleColor.Yellow, ConsoleColor.DarkYellow, new Coord(4, 4))
-		    };
+			var items = new List<Item>
+			{
+				new Item("key", false, '\u00a5', ConsoleColor.Yellow, ConsoleColor.DarkYellow, new Coord(4, 4)),
+				new Item("umbrella", true, '\u03a8', ConsoleColor.Red, ConsoleColor.DarkRed, new Coord(3, 3))
+			};
 
 			var room = new Room(width, height, doors, items);
 			room.OnExit = () =>

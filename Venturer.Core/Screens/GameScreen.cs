@@ -54,6 +54,9 @@ namespace Venturer.Core.Screens
 						"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 					});
 					break;
+				case Command.Inspect:
+					Inspect();
+					break;
 			}
 
 			// GameScreen should be the last thing in the stack.
@@ -178,7 +181,7 @@ namespace Venturer.Core.Screens
 					new MenuOption("Continue", () => { }, false, true),
 					new MenuOption("Save", () =>
 					{
-					    _newScreen = CommonMenus.SaveSlotPicker("Save game", SaveGame, () => { });
+						_newScreen = CommonMenus.SaveSlotPicker("Save game", SaveGame, () => { });
 					}, false, false),
 					new MenuOption("Quit", () =>
 					{
@@ -190,10 +193,25 @@ namespace Venturer.Core.Screens
 			}
 		}
 
-	    private void SaveGame(int saveSlot)
-	    {
-	        _gameData.SaveGame(saveSlot);
-            _newScreen = new MultiTextScreen("Game saved to slot " + saveSlot);
-	    }
+		private void SaveGame(int saveSlot)
+		{
+			_gameData.SaveGame(saveSlot);
+			_newScreen = new MultiTextScreen("Game saved to slot " + saveSlot);
+		}
+
+		private void Inspect()
+		{
+			var itemsAroundPlayer = _room.Items.Where(i => Coord.Distance(i.Location, _player.Position) < 2).ToList();
+			if (itemsAroundPlayer.Count > 0)
+			{
+				var options = itemsAroundPlayer.Select(i => new MenuOption(i.AsListItem, () => { }, false, true)).ToList();
+				options.Add(new MenuOption("Cancel", () => { }, false, true));
+				_newScreen = new Menu("You look around and see:", options, () => { });
+			}
+			else
+			{
+				_newScreen = new MultiTextScreen("You look around, but there is nothing nearby.");
+			}
+		}
 	}
 }
