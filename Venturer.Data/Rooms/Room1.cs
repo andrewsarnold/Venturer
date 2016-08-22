@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Venturer.Core;
 using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Environment.Tiles;
@@ -16,7 +18,12 @@ namespace Venturer.Data.Rooms
 			{
 				new Door(new Coord(29, 5), "end", new Coord(1, 2))
 			};
-			var room = new Room("start", width, height, SetWalls(width, height), doors)
+			var items = new List<Item>
+			{
+				new Item("key", false, '\u00a5', ConsoleColor.Yellow, ConsoleColor.DarkYellow, new Coord(4, 4)),
+				new Item("umbrella", true, '\u03a8', ConsoleColor.Red, ConsoleColor.DarkRed, new Coord(3, 3))
+			};
+			var room = new Room("start", width, height, SetWalls(width, height), doors, items)
 			{
 				StartingLocation = new Coord(5, 5)
 			};

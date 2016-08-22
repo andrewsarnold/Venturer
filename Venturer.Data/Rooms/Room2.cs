@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Venturer.Core;
 using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Environment.Tiles;
@@ -17,7 +17,7 @@ namespace Venturer.Data.Rooms
 			{
 				new Door(new Coord(0, 2), "start", new Coord(28, 5))
 			};
-			var room = new Room("end", width, height, SetWalls(width, height), doors);
+			var room = new Room("end", width, height, SetWalls(width, height), doors, new List<Item>());
 			room.OnEnter = () =>
 			{
 				room.CreateNewViewPort(new MultiTextScreen("you entered room 2"));

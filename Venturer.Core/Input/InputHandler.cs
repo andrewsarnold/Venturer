@@ -97,6 +97,8 @@ namespace Venturer.Core.Input
 					return Command.MoveRight;
 				case ConsoleKey.M:
 					return Command.Misc;
+				case ConsoleKey.I:
+					return Command.Inspect;
 			}
 
 			return Command.Null;

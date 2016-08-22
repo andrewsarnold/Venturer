@@ -51,6 +51,7 @@
     <Compile Include="Input\Command.cs" />
     <Compile Include="Input\InputContext.cs" />
     <Compile Include="Input\InputHandler.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Mobs\Mob.cs" />
     <Compile Include="Output\CodePoint.cs" />
     <Compile Include="Output\Glyph.cs" />
