@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Venturer.Core.Common;
+using Venturer.Core.Screens;
 
 namespace Venturer.Core.Environment
 {
@@ -20,7 +21,20 @@ namespace Venturer.Core.Environment
 			{
 				new Door(new Coord(0, 3), "end", new Coord(28, 2))
 			};
-			return new Room(width, height, doors);
+			var room = new Room(width, height, doors);
+			room.OnEnter = () =>
+			{
+				//room.CreateNewViewPort(new Menu("Room menu", new List<MenuOption>
+				//{
+				//	new MenuOption("one", () => { }, false),
+				//	new MenuOption("two", () => { }, false)
+				//}, () => { }));
+			};
+			room.OnExit = () =>
+			{
+				room.CreateNewViewPort(new MultiTextScreen("you left the room"));
+			};
+			return room;
 		}
 	}
 }

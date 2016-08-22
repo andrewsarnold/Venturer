@@ -89,9 +89,15 @@ namespace Venturer.Core.Screens
 
 		private void SetUpRoom(Room room, Coord playerLocation)
 		{
+			_room?.OnExit?.Invoke();
 			_room = room;
 			_player.Position = playerLocation;
 			_camera = _player.Position;
+			_room.ShowNewViewPort += (sender, port) =>
+			{
+				_newScreen = port;
+			};
+			_room.OnEnter?.Invoke();
 		}
 
 		private void DirectionallyInteract(Command command)
@@ -169,7 +175,7 @@ namespace Venturer.Core.Screens
 		{
 			get
 			{
-				return new Menu(Width, Height, "P A U S E D", new List<MenuOption>
+				return new Menu("P A U S E D", new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false),
 					new MenuOption("Reset", () => { ShouldReset = true; }, true),

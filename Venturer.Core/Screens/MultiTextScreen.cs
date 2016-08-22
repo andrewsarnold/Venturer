@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Venturer.Core.Common;
 using Venturer.Core.Input;
 using Venturer.Core.Output;
 
@@ -12,6 +13,18 @@ namespace Venturer.Core.Screens
 		private int _stringIndex;
 
 		internal override InputContext InputContext => InputContext.TextBox;
+
+		public MultiTextScreen(string text)
+			: base(0, 0)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+			{
+				throw new ArgumentException("No strings given");
+			}
+
+			_strings = new List<string> { text };
+			_stringIndex = 0;
+		}
 
 		public MultiTextScreen(List<string> strings)
 			: base(0, 0)
@@ -29,7 +42,7 @@ namespace Venturer.Core.Screens
 		{
 			var glyphs = new Glyph[width, height];
 			var continueChar = _stringIndex < _strings.Count - 1 ? CodePoint.TriangleRight : CodePoint.Square;
-			Common.Utilities.TextBox(glyphs, new[] { _strings[_stringIndex] }, width, height, continueChar);
+			Utilities.TextBox(glyphs, new[] { _strings[_stringIndex] }, width, height, continueChar);
 			return new Screen(glyphs);
 		}
 
