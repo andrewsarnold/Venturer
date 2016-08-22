@@ -52,6 +52,14 @@ namespace Venturer.Core.Common
 			}
 		}
 
+		internal static void WriteTextLine(Glyph[,] chars, Coord startLocation, string text)
+		{
+			for (var x = 0; x < text.Length; x++)
+			{
+				chars[startLocation.X + x, startLocation.Y] = new Glyph(text[x]);
+			}
+		}
+
 		private static List<string> SplitString(string text, int maxWidth)
 		{
 			var words = text.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);

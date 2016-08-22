@@ -16,12 +16,13 @@ namespace Venturer.Core.Screens
 		private ViewPort _newScreen;
 		private readonly Level _level;
 		private readonly Player _player;
+		private bool _shouldQuit;
 
-		public bool ShouldQuit { get; private set; }
 		public bool ShouldReset { get; private set; }
 
 		internal override bool ShouldDestroy => false;
 		internal override InputContext InputContext => InputContext.Game;
+		internal override bool ShouldQuit => _shouldQuit;
 
 		public GameScreen(int width, int height)
 			: base(width, height)
@@ -180,7 +181,7 @@ namespace Venturer.Core.Screens
 					new MenuOption("Continue", () => { }, false),
 					new MenuOption("Reset", () => { ShouldReset = true; }, true),
 					new MenuOption("Save", () => { }, false),
-					new MenuOption("Quit", () => { ShouldQuit = true; }, true)
+					new MenuOption("Quit", () => { _shouldQuit = true; }, true)
 				},
 				() => { });
 			}
