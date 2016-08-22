@@ -69,7 +69,7 @@ namespace Venturer.Core.Screens
 			_player.Draw(chars,
 				roomLeft + _player.Position.X,
 				roomTop + _player.Position.Y,
-				_room.BackgroundColorAt(_player.Position));
+				_room.BackgroundColorAt(_player.Position, true));
 			return new Screen(chars, xOffset, yOffset);
 		}
 

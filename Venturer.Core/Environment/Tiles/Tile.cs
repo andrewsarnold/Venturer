@@ -15,7 +15,6 @@ namespace Venturer.Core.Environment.Tiles
 			ConsoleColor lightForegroundColor, ConsoleColor darkForegroundColor,
 			ConsoleColor lightBackgroundColor, ConsoleColor darkBackgroundColor)
 		{
-			_hasSeen = false;
 			Representation = representation;
 			_lightForegroundColor = lightForegroundColor;
 			_darkForegroundColor = darkForegroundColor;

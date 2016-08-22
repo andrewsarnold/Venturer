@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Venturer.Core;
 using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Screens;
@@ -22,7 +24,13 @@ namespace Venturer.Data
 			{
 				new Door(new Coord(0, 3), "end", new Coord(28, 2))
 			};
-			var room = new Room(width, height, doors);
+
+		    var items = new List<Item>
+		    {
+                new Item("key", '\u00a5', ConsoleColor.Yellow, ConsoleColor.DarkYellow, new Coord(4, 4))
+		    };
+
+			var room = new Room(width, height, doors, items);
 			room.OnExit = () =>
 			{
 				room.CreateNewViewPort(new MultiTextScreen("you left the room"));

@@ -16,16 +16,18 @@ namespace Venturer.Core.Environment
 		public int Height { get; }
 
 		internal readonly List<Door> Doors;
+	    internal readonly List<Item> Items;
 
 		public Action OnEnter;
 		public Action OnExit;
 
 		internal event EventHandler<ViewPort> ShowNewViewPort;
 
-		public Room(int width, int height, List<Door> doors)
+		public Room(int width, int height, List<Door> doors, List<Item> items)
 		{
 			Doors = doors;
-			_tiles = new Tile[width, height];
+		    Items = items;
+		    _tiles = new Tile[width, height];
 			_viewDistance = 15;
 			Width = width;
 			Height = height;
@@ -153,6 +155,12 @@ namespace Venturer.Core.Environment
 					Screen.AddChar(chars, x + roomLeft, y + roomTop, _tiles[x, y].ToCharacter(isLit[x, y]));
 				}
 			}
+
+		    foreach (var item in Items)
+		    {
+		        var isThisLit = isLit[item.Location.X, item.Location.Y];
+                Screen.AddChar(chars, item.Location.X + roomLeft, item.Location.Y + roomTop, new Glyph(item.Representation, isThisLit ? item.Color : item.UnlitColor, BackgroundColorAt(item.Location, isThisLit)));
+            }
 		}
 
 		internal void SetAsSeen(Coord target)
@@ -160,9 +168,9 @@ namespace Venturer.Core.Environment
 			_tiles[target.X, target.Y].SetAsSeen();
 		}
 
-		internal ConsoleColor BackgroundColorAt(Coord c)
+		internal ConsoleColor BackgroundColorAt(Coord c, bool isVisible)
 		{
-			return _tiles[c.X, c.Y].ToCharacter(true).BackgroundColor;
+			return _tiles[c.X, c.Y].ToCharacter(isVisible).BackgroundColor;
 		}
 
 		public void CreateNewViewPort(ViewPort viewPort)
