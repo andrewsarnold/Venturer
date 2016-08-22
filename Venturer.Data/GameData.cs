@@ -20,5 +20,9 @@ namespace Venturer.Data
 		{
 			GameTitle = $"Loaded from slot {slot}";
 		}
-	}
+
+	    public void SaveGame(int slot)
+	    {
+	    }
+    }
 }
