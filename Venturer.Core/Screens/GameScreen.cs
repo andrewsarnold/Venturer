@@ -10,25 +10,25 @@ namespace Venturer.Core.Screens
 {
 	internal class GameScreen : ViewPort
 	{
+		private readonly IGameData _gameData;
 		private const int MaxCameraDistance = 5;
 		private Room _room;
 		private Coord _camera;
 		private ViewPort _newScreen;
 		private readonly Level _level;
 		private readonly Player _player;
-		private bool _shouldQuit;
+		private bool _shouldDestroy;
 
-		public bool ShouldReset { get; private set; }
-
-		internal override bool ShouldDestroy => false;
+		internal override bool ShouldDestroy => _shouldDestroy;
 		internal override InputContext InputContext => InputContext.Game;
-		internal override bool ShouldQuit => _shouldQuit;
+		internal override bool ShouldQuit => false;
 
 		public GameScreen(IGameData gameData, int width, int height)
 			: base(width, height)
 		{
+			_gameData = gameData;
 			_player = new Player(new Coord());
-			_level = gameData.LevelFactory.GetLevel();
+			_level = _gameData.LevelFactory.GetLevel();
 			SetUpRoom(_level.Rooms.First().Value);
 		}
 
@@ -36,9 +36,6 @@ namespace Venturer.Core.Screens
 		{
 			switch (command)
 			{
-				case Command.Quit:
-					// menu
-					break;
 				case Command.MoveUp:
 				case Command.MoveDown:
 				case Command.MoveLeft:
@@ -179,9 +176,12 @@ namespace Venturer.Core.Screens
 				return new Menu("P A U S E D", new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false),
-					new MenuOption("Reset", () => { ShouldReset = true; }, true),
 					new MenuOption("Save", () => { }, false),
-					new MenuOption("Quit", () => { _shouldQuit = true; }, true)
+					new MenuOption("Quit", () =>
+					{
+						_newScreen = new MainMenu(_gameData);
+						_shouldDestroy = true;
+					}, true)
 				},
 				() => { });
 			}
