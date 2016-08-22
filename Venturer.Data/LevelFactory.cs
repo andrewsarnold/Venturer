@@ -12,7 +12,7 @@ namespace Venturer.Data
 		{
 			return new Level(new Dictionary<string, Room>
 			{
-				{ "start", MakeRoom(200, 10) }
+				{ "start", MakeRoom(200, 30) }
 			});
 		}
 
@@ -24,7 +24,7 @@ namespace Venturer.Data
 			};
 			var room = new Room(width, height, SetWalls(width, height), doors)
 			{
-				StartingLocation = new Coord(2, 5)
+				StartingLocation = new Coord(5, 5)
 			};
 			room.OnExit = () =>
 			{
@@ -40,13 +40,37 @@ namespace Venturer.Data
 			{
 				for (var y = 0; y < height; y++)
 				{
-					tiles[x, y] =
-						x == 0 ||
-						y == 0 ||
-						x == width - 1 ||
-						y == height - 1
-							? new WallTile()
-							: (Tile)new FloorTile();
+					var tileSet = false;
+
+					if (y > 4 && y < 6 && x > 5)
+					{
+						tiles[x, y] = new FloorTile();
+						tileSet = true;
+					}
+
+					if (y == 4 || y == 6 && x > 5)
+					{
+						tiles[x, y] = new WallTile();
+						tileSet = true;
+					}
+
+					var distToStart = Coord.Distance(new Coord(x, y), new Coord(5, 5));
+					if (distToStart < 4)
+					{
+						tiles[x, y] = new FloorTile();
+						tileSet = true;
+					}
+
+					if (distToStart <= 5 && !tileSet)
+					{
+						tiles[x, y] = new WallTile();
+						tileSet = true;
+					}
+
+					if (!tileSet)
+					{
+						tiles[x, y] = new EmptyTile();
+					}
 				}
 			}
 

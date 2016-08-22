@@ -6,7 +6,7 @@ namespace Venturer.Core.Environment.Tiles
 	public class FloorTile : Tile
 	{
 		public FloorTile()
-			: base(CodePoint.Null, ConsoleColor.DarkGray, ConsoleColor.Black, ConsoleColor.Black, ConsoleColor.Black)
+			: base(CodePoint.Space, ConsoleColor.DarkGray, ConsoleColor.Black, ConsoleColor.Black, ConsoleColor.Black)
 		{
 		}
 
