@@ -6,7 +6,7 @@ using Venturer.Core.Output;
 
 namespace Venturer.Core.Screens
 {
-	internal class MainMenu : ViewPort
+    internal class MainMenu : ViewPort
 	{
 		private readonly IGameData _gameData;
 		private readonly List<Tuple<string, Action>> _options;
@@ -15,8 +15,8 @@ namespace Venturer.Core.Screens
 		private bool _shouldDestroy;
 		private bool _shouldQuit;
 
-		public MainMenu(IGameData gameData, int width, int height)
-			: base(width, height)
+		public MainMenu(IGameData gameData)
+			: base(gameData.WindowWidth, gameData.WindowHeight)
 		{
 			_gameData = gameData;
 			_options = new List<Tuple<string, Action>>
@@ -27,13 +27,7 @@ namespace Venturer.Core.Screens
 					_shouldDestroy = true;
 				}),
 				new Tuple<string, Action>("Continue", () => { }),
-				new Tuple<string, Action>("Load", () => { _newScreen = new Menu("Load game", new List<MenuOption>
-				{
-					new MenuOption("Slot 1", () => LoadGame(1), false),
-					new MenuOption("Slot 2", () => LoadGame(2), false),
-					new MenuOption("Slot 3", () => LoadGame(3), false),
-					new MenuOption("Back", () => { }, false)
-				}, () => { }); }),
+				new Tuple<string, Action>("Load", () => { _newScreen = CommonMenus.SaveSlotPicker("Load game", LoadGame, () => { }); }),
 				new Tuple<string, Action>("Quit", () => { _shouldQuit = true; })
 			};
 			_selectedIndex = 0;

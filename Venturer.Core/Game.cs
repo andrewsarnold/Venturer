@@ -11,8 +11,6 @@ namespace Venturer.Core
 	public class Game : IDisposable
 	{
 		private readonly IGameData _gameData;
-		public const int WindowWidth = 78;
-		public const int WindowHeight = 24;
 		private readonly Stack<ViewPort> _screenStack;
 		private bool _shouldQuit;
 
@@ -20,6 +18,8 @@ namespace Venturer.Core
 
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
+
+		public event EventHandler<string> UpdateTitle;
 
 		public Game(IGameData gameData)
 		{
@@ -32,7 +32,7 @@ namespace Venturer.Core
 			timer.Start();
 
 			_screenStack = new Stack<ViewPort>();
-			_screenStack.Push(new MainMenu(_gameData, WindowWidth, WindowHeight));
+			_screenStack.Push(new MainMenu(_gameData));
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Venturer.Core
 			DestroyOldScreens();
 
 			// To be moved elsewhere
-			UpdateTitle?.Invoke(this, null);
+			UpdateTitle?.Invoke(this, _gameData.GameTitle);
 
 			return _shouldQuit;
 		}
@@ -109,8 +109,8 @@ namespace Venturer.Core
 
 		public Screen ToScreen()
 		{
-			var screens = CompileScreenList(WindowWidth, WindowHeight);
-			return WriteScreens(screens, WindowWidth, WindowHeight);
+			var screens = CompileScreenList(_gameData.WindowWidth, _gameData.WindowHeight);
+			return WriteScreens(screens);
 		}
 
 		private List<Screen> CompileScreenList(int width, int height)
@@ -118,13 +118,13 @@ namespace Venturer.Core
 			return _screenStack.Select(s => s.ToScreen(width, height)).Reverse().ToList();
 		}
 
-		private static Screen WriteScreens(List<Screen> screens, int width, int height)
+		private Screen WriteScreens(IReadOnlyCollection<Screen> screens)
 		{
-			var returnCh = new Glyph[width, height];
+			var returnCh = new Glyph[_gameData.WindowWidth, _gameData.WindowHeight];
 
-			for (var x = 0; x < width; x++)
+			for (var x = 0; x < _gameData.WindowWidth; x++)
 			{
-				for (var y = 0; y < height; y++)
+				for (var y = 0; y < _gameData.WindowHeight; y++)
 				{
 					foreach (var screen in screens)
 					{

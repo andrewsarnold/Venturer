@@ -127,29 +127,21 @@ namespace Venturer.Core.Screens
 			return new Coord(targetX, targetY);
 		}
 
-		private Direction TryToMove(Coord target, bool movedHorizontally)
+		private void TryToMove(Coord target, bool movedHorizontally)
 		{
 			// Is there a door here?
 			var doorHere = _room.Doors.SingleOrDefault(d => d.Location.Equals(target));
 			if (doorHere != null)
 			{
 				SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
-				return Direction.None;
+				return;
 			}
 
 			var couldMove = _room.IsInRoom(target) && _room.IsFreeOfArchitecture(target);
-			if (couldMove)
-			{
-				_player.Position = target;
-				ShiftCamera(movedHorizontally);
-				_room.SetAsSeen(target);
-			}
-
-			if (target.X < _player.Position.X) return Direction.West;
-			if (target.Y < _player.Position.Y) return Direction.North;
-			if (target.X > _player.Position.X) return Direction.East;
-			if (target.Y > _player.Position.Y) return Direction.South;
-			return Direction.None;
+			if (!couldMove) return;
+			_player.Position = target;
+			ShiftCamera(movedHorizontally);
+			_room.SetAsSeen(target);
 		}
 
 		private void ShiftCamera(bool movedHorizontally)
@@ -175,16 +167,25 @@ namespace Venturer.Core.Screens
 			{
 				return new Menu("P A U S E D", new List<MenuOption>
 				{
-					new MenuOption("Continue", () => { }, false),
-					new MenuOption("Save", () => { }, false),
+					new MenuOption("Continue", () => { }, false, true),
+					new MenuOption("Save", () =>
+					{
+					    _newScreen = CommonMenus.SaveSlotPicker("Save game", SaveGame, () => { });
+					}, false, false),
 					new MenuOption("Quit", () =>
 					{
 						_newScreen = new MainMenu(_gameData);
 						_shouldDestroy = true;
-					}, true)
+					}, true, true)
 				},
 				() => { });
 			}
 		}
+
+	    private void SaveGame(int saveSlot)
+	    {
+	        _gameData.SaveGame(saveSlot);
+            _newScreen = new MultiTextScreen("Game saved to slot " + saveSlot);
+	    }
 	}
 }
