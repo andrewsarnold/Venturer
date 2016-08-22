@@ -23,11 +23,11 @@ namespace Venturer.Core.Screens
 		internal override bool ShouldDestroy => false;
 		internal override InputContext InputContext => InputContext.Game;
 
-		public GameScreen(int width, int height)
+		public GameScreen(IGameData gameData, int width, int height)
 			: base(width, height)
 		{
 			_player = new Player(new Coord());
-			_level = LevelFactory.GetLevel();
+			_level = gameData.LevelFactory.GetLevel();
 			SetUpRoom(_level.Rooms.First().Value);
 		}
 

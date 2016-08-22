@@ -17,12 +17,12 @@ namespace Venturer.Core.Environment
 
 		internal readonly List<Door> Doors;
 
-		internal Action OnEnter;
-		internal Action OnExit;
+		public Action OnEnter;
+		public Action OnExit;
 
 		internal event EventHandler<ViewPort> ShowNewViewPort;
 
-		internal Room(int width, int height, List<Door> doors)
+		public Room(int width, int height, List<Door> doors)
 		{
 			Doors = doors;
 			_tiles = new Tile[width, height];
@@ -165,10 +165,9 @@ namespace Venturer.Core.Environment
 			return _tiles[c.X, c.Y].ToCharacter(true).BackgroundColor;
 		}
 
-		internal void CreateNewViewPort(ViewPort viewPort)
+		public void CreateNewViewPort(ViewPort viewPort)
 		{
-			if (ShowNewViewPort != null)
-				ShowNewViewPort(this, viewPort);
+			ShowNewViewPort?.Invoke(this, viewPort);
 		}
 	}
 }
