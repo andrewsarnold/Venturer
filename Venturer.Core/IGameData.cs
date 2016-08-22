@@ -7,6 +7,7 @@ namespace Venturer.Core
 		int WindowWidth { get; }
 		int WindowHeight { get; }
 		string GameTitle { get; }
+		string WindowTitle { get; }
 		ILevelFactory LevelFactory { get; }
 
 		void LoadGame(int slot);

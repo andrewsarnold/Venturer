@@ -14,7 +14,7 @@ namespace Venturer.Core
 		private readonly Stack<ViewPort> _screenStack;
 		private bool _shouldQuit;
 
-		public string Title => _gameData.GameTitle;
+		public string WindowTitle => _gameData.WindowTitle;
 
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
@@ -67,7 +67,7 @@ namespace Venturer.Core
 			DestroyOldScreens();
 
 			// To be moved elsewhere
-			UpdateTitle?.Invoke(this, _gameData.GameTitle);
+			UpdateTitle?.Invoke(this, _gameData.WindowTitle);
 
 			return _shouldQuit;
 		}
