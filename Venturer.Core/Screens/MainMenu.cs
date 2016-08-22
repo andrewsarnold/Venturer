@@ -46,6 +46,9 @@ namespace Venturer.Core.Screens
 				case Command.Select:
 					_options[_selectedIndex].Item2();
 					break;
+				case Command.Quit:
+					_shouldQuit = true;
+					break;
 			}
 			
 			return false;
