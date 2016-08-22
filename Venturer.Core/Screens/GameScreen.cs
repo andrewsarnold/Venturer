@@ -82,7 +82,7 @@ namespace Venturer.Core.Screens
 
 		private void SetUpRoom(Room room)
 		{
-			SetUpRoom(room, new Coord(room.Width / 2, room.Height / 2));
+			SetUpRoom(room, room.StartingLocation);
 		}
 
 		private void SetUpRoom(Room room, Coord playerLocation)

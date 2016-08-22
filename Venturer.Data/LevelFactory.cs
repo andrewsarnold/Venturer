@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Venturer.Core.Common;
 using Venturer.Core.Environment;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Screens;
@@ -17,8 +18,14 @@ namespace Venturer.Data
 
 		private static Room MakeRoom(int width, int height)
 		{
-			var doors = new List<Door>();
-			var room = new Room(width, height, SetWalls(width, height), doors);
+			var doors = new List<Door>
+			{
+				new Door(new Coord(199, 5), null, new Coord(0, 0))
+			};
+			var room = new Room(width, height, SetWalls(width, height), doors)
+			{
+				StartingLocation = new Coord(2, 5)
+			};
 			room.OnExit = () =>
 			{
 				room.CreateNewViewPort(new MultiTextScreen("you left the room"));

@@ -13,6 +13,7 @@ namespace Venturer.Core.Environment
 
 		public int Width { get; }
 		public int Height { get; }
+		public Coord StartingLocation;
 
 		internal readonly List<Door> Doors;
 
