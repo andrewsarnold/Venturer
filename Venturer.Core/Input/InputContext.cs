@@ -2,6 +2,7 @@
 {
 	internal enum InputContext
 	{
+		MainMenu,
 		Game,
 		Menu,
 		TextBox

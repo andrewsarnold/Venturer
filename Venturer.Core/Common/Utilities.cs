@@ -19,10 +19,7 @@ namespace Venturer.Core.Common
 			// Draw interior
 			for (var l = 0; l < lines.Count; l++)
 			{
-				for (var c = 0; c < maxWidth; c++)
-				{
-					Screen.AddChar(chars, leftX + c, topY + l, c < lines[l].Length ? new Glyph(lines[l][c]) : new Glyph(' '));
-				}
+				WriteTextLine(chars, new Coord(leftX, topY + l), lines[l], maxWidth);
 			}
 
 			// Draw corners
@@ -49,6 +46,14 @@ namespace Venturer.Core.Common
 			if (continueChar != ' ')
 			{
 				Screen.AddChar(chars, leftX + maxWidth - 1, lines.Count + topY - 1, new Glyph(continueChar));
+			}
+		}
+
+		internal static void WriteTextLine(Glyph[,] chars, Coord startLocation, string text, int padToWidth = 0)
+		{
+			for (var x = 0; x < (padToWidth > text.Length ? padToWidth : text.Length); x++)
+			{
+				chars[startLocation.X + x, startLocation.Y] = new Glyph(x >= text.Length ? ' ' : text[x]);
 			}
 		}
 

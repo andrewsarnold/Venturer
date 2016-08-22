@@ -17,6 +17,7 @@ namespace Venturer.Core.Screens
 
 		internal override bool ShouldDestroy => _handled;
 		internal override InputContext InputContext => InputContext.Menu;
+		internal override bool ShouldQuit => false;
 
 		public Menu(string header, List<MenuOption> options, Action onEscape)
 			: base(0, 0)

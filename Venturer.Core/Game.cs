@@ -32,7 +32,7 @@ namespace Venturer.Core
 			timer.Start();
 
 			_screenStack = new Stack<ViewPort>();
-			_screenStack.Push(new GameScreen(gameData, WindowWidth, WindowHeight));
+			_screenStack.Push(new MainMenu(_gameData, WindowWidth, WindowHeight));
 		}
 
 		/// <summary>
@@ -43,7 +43,6 @@ namespace Venturer.Core
 		public bool Input(ConsoleKeyInfo key)
 		{
 			// Everything should be handled by screens
-			var shouldReset = false;
 
 			// Foreach screen in stack, top-down:
 			//   Should I handle?
@@ -52,27 +51,13 @@ namespace Venturer.Core
 			{
 				var shouldBubble = viewPort.HandleInput(InputHandler.Translate(key, viewPort.InputContext));
 
-				// Find out if the game screen wants us to quit
-				var gameScreen = viewPort as GameScreen;
-				if (gameScreen != null)
-				{
-					_shouldQuit = gameScreen.ShouldQuit;
-					if (gameScreen.ShouldReset)
-					{
-						shouldReset = true;
-						break;
-					}
-				}
+				// Find out if the screen wants us to quit
+				_shouldQuit = viewPort.ShouldQuit;
 
 				if (!shouldBubble)
 				{
 					break;
 				}
-			}
-
-			if (shouldReset)
-			{
-				Initialize();
 			}
 
 			// Write new messages / add new screens
@@ -86,15 +71,23 @@ namespace Venturer.Core
 
 		private void DestroyOldScreens()
 		{
-			var top = _screenStack.Peek();
-			do
+			var tempStack = new Stack<ViewPort>();
+			while (_screenStack.Count > 0)
 			{
-				if (top.ShouldDestroy)
+				if (!_screenStack.Peek().ShouldDestroy)
+				{
+					tempStack.Push(_screenStack.Pop());
+				}
+				else
 				{
 					_screenStack.Pop();
-					top = _screenStack.Peek();
 				}
-			} while (top.ShouldDestroy);
+			}
+
+			while (tempStack.Count > 0)
+			{
+				_screenStack.Push(tempStack.Pop());
+			}
 		}
 
 		private void AddNewScreens()
@@ -104,12 +97,6 @@ namespace Venturer.Core
 			{
 				_screenStack.Push(screen);
 			}
-		}
-
-		private void Initialize()
-		{
-			_screenStack.Clear();
-			_screenStack.Push(new GameScreen(_gameData, WindowWidth, WindowHeight));
 		}
 
 		public void Dispose()

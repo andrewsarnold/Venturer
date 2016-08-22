@@ -21,5 +21,10 @@ namespace Venturer.Core.Output
 			ForegroundColor = foregroundColor;
 			BackgroundColor = backgroundColor;
 		}
+
+		public override string ToString()
+		{
+			return Value.ToString();
+		}
 	}
 }

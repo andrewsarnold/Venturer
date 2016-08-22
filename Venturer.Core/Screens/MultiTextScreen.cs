@@ -13,6 +13,7 @@ namespace Venturer.Core.Screens
 		private int _stringIndex;
 
 		internal override InputContext InputContext => InputContext.TextBox;
+		internal override bool ShouldQuit => false;
 
 		public MultiTextScreen(string text)
 			: base(0, 0)
