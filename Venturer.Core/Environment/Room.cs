@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Venturer.Core.Common;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Output;
@@ -22,15 +21,15 @@ namespace Venturer.Core.Environment
 
 		internal event EventHandler<ViewPort> ShowNewViewPort;
 
-		public Room(int width, int height, List<Door> doors)
+		public Room(int width, int height, Tile[,] tiles, List<Door> doors)
 		{
 			Doors = doors;
-			_tiles = new Tile[width, height];
+			_tiles = tiles;
 			_viewDistance = 15;
 			Width = width;
 			Height = height;
 
-			SetWalls();
+			SetWallVisuals();
 			SetFloorVisuals();
 			SetDoors();
 		}
@@ -54,28 +53,6 @@ namespace Venturer.Core.Environment
 				target.Y >= 0 &&
 				target.X < Width &&
 				target.Y < Height;
-		}
-
-		private void SetWalls()
-		{
-			var r = new Random();
-			for (var x = 0; x < Width; x++)
-			{
-				for (var y = 0; y < Height; y++)
-				{
-					_tiles[x, y] =
-						!Doors.Any(d => d.Location.Equals(new Coord(x, y))) &&
-						x == 0 ||
-						y == 0 ||
-						x == Width - 1 ||
-						y == Height - 1 ||
-						r.NextDouble() > 0.9
-							? new WallTile()
-							: (Tile) new FloorTile();
-				}
-			}
-
-			SetWallVisuals();
 		}
 
 		private void SetWallVisuals()
