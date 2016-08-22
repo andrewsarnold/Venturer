@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Win32.SafeHandles;
 using Venturer.Core;
 using Venturer.Core.Output;
+using Venturer.Data;
 
 namespace Venturer.ConsoleApp
 {
@@ -20,42 +21,44 @@ namespace Venturer.ConsoleApp
 				return;
 			}
 
-			using (var game = new Game())
+			var gameData = new GameData();
+			using (var game = new Game(gameData))
 			{
-				Console.SetWindowSize(Game.WindowWidth, Game.WindowHeight);
-				Console.SetBufferSize(Game.WindowWidth, Game.WindowHeight);
+				Console.SetWindowSize(gameData.WindowWidth, gameData.WindowHeight);
+				Console.SetBufferSize(gameData.WindowWidth, gameData.WindowHeight);
 				Console.Title = game.Title;
 				Console.OutputEncoding = Encoding.Unicode;
 				Console.CursorVisible = false;
 
 				//game.Draw += () => { Write(game.ToScreen(), h); };
+				game.UpdateTitle += (sender, args) => Console.Title = game.Title;
 
 				bool shouldQuit;
 				do
 				{
-					Write(game.ToScreen(), h);
+					Write(gameData, game.ToScreen(), h);
 					shouldQuit = game.Input(Console.ReadKey(true));
 				} while (!shouldQuit);
 			}
 		}
 
-		private static void Write(Screen screen, SafeFileHandle h)
+		private static void Write(IGameData gameData, Screen screen, SafeFileHandle h)
 		{
-			var buf = new CharInfo[Game.WindowWidth * Game.WindowHeight];
-			var rect = new SmallRect { Left = 0, Top = 0, Right = Game.WindowWidth, Bottom = Game.WindowHeight };
+			var buf = new CharInfo[gameData.WindowWidth * gameData.WindowHeight];
+			var rect = new SmallRect { Left = 0, Top = 0, Right = (short)gameData.WindowWidth, Bottom = (short)gameData.WindowHeight };
 
-			for (var y = 0; y < Game.WindowHeight; y++)
+			for (var y = 0; y < gameData.WindowHeight; y++)
 			{
-				for (var x = 0; x < Game.WindowWidth; x++)
+				for (var x = 0; x < gameData.WindowWidth; x++)
 				{
-					var b = y * Game.WindowWidth + x;
+					var b = y * gameData.WindowWidth + x;
 					buf[b].Attributes = AttributeAsShort(screen.Values[x, y].ForegroundColor, screen.Values[x, y].BackgroundColor);
 					buf[b].Char.UnicodeChar = screen.Values[x, y].Value;
 				}
 			}
 
 			NativeMethods.WriteConsoleOutput(h, buf,
-				new Coord { X = Game.WindowWidth, Y = Game.WindowHeight },
+				new Coord { X = (short)gameData.WindowWidth, Y = (short)gameData.WindowHeight },
 				new Coord { X = 0, Y = 0 },
 				ref rect);
 		}

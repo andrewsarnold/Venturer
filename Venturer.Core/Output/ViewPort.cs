@@ -2,7 +2,7 @@
 
 namespace Venturer.Core.Output
 {
-	internal abstract class ViewPort
+	public abstract class ViewPort
 	{
 		/// <summary>
 		/// The output screen width.
@@ -51,5 +51,10 @@ namespace Venturer.Core.Output
 		/// Returns the input context for this viewport.
 		/// </summary>
 		internal abstract InputContext InputContext { get; }
+
+		/// <summary>
+		/// Returns whether the application should close.
+		/// </summary>
+		internal abstract bool ShouldQuit { get; }
 	}
 }

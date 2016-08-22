@@ -10,18 +10,20 @@ namespace Venturer.Core
 {
 	public class Game : IDisposable
 	{
-		public const int WindowWidth = 78;
-		public const int WindowHeight = 24;
+		private readonly IGameData _gameData;
 		private readonly Stack<ViewPort> _screenStack;
 		private bool _shouldQuit;
 
-		public string Title => "Venturer.Core";
+		public string Title => _gameData.GameTitle;
 
 		public event DrawHandler Draw;
 		public delegate void DrawHandler();
 
-		public Game()
+		public event EventHandler<string> UpdateTitle;
+
+		public Game(IGameData gameData)
 		{
+			_gameData = gameData;
 			var timer = new Timer(83.3333);
 			timer.Elapsed += (sender, args) =>
 			{
@@ -30,7 +32,7 @@ namespace Venturer.Core
 			timer.Start();
 
 			_screenStack = new Stack<ViewPort>();
-			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight));
+			_screenStack.Push(new MainMenu(_gameData));
 		}
 
 		/// <summary>
@@ -41,7 +43,6 @@ namespace Venturer.Core
 		public bool Input(ConsoleKeyInfo key)
 		{
 			// Everything should be handled by screens
-			var shouldReset = false;
 
 			// Foreach screen in stack, top-down:
 			//   Should I handle?
@@ -50,27 +51,13 @@ namespace Venturer.Core
 			{
 				var shouldBubble = viewPort.HandleInput(InputHandler.Translate(key, viewPort.InputContext));
 
-				// Find out if the game screen wants us to quit
-				var gameScreen = viewPort as GameScreen;
-				if (gameScreen != null)
-				{
-					_shouldQuit = gameScreen.ShouldQuit;
-					if (gameScreen.ShouldReset)
-					{
-						shouldReset = true;
-						break;
-					}
-				}
+				// Find out if the screen wants us to quit
+				_shouldQuit = viewPort.ShouldQuit;
 
 				if (!shouldBubble)
 				{
 					break;
 				}
-			}
-
-			if (shouldReset)
-			{
-				Initialize();
 			}
 
 			// Write new messages / add new screens
@@ -79,20 +66,31 @@ namespace Venturer.Core
 			// Destroy expired screens
 			DestroyOldScreens();
 
+			// To be moved elsewhere
+			UpdateTitle?.Invoke(this, _gameData.GameTitle);
+
 			return _shouldQuit;
 		}
 
 		private void DestroyOldScreens()
 		{
-			var top = _screenStack.Peek();
-			do
+			var tempStack = new Stack<ViewPort>();
+			while (_screenStack.Count > 0)
 			{
-				if (top.ShouldDestroy)
+				if (!_screenStack.Peek().ShouldDestroy)
+				{
+					tempStack.Push(_screenStack.Pop());
+				}
+				else
 				{
 					_screenStack.Pop();
-					top = _screenStack.Peek();
 				}
-			} while (top.ShouldDestroy);
+			}
+
+			while (tempStack.Count > 0)
+			{
+				_screenStack.Push(tempStack.Pop());
+			}
 		}
 
 		private void AddNewScreens()
@@ -104,12 +102,6 @@ namespace Venturer.Core
 			}
 		}
 
-		private void Initialize()
-		{
-			_screenStack.Clear();
-			_screenStack.Push(new GameScreen(WindowWidth, WindowHeight));
-		}
-
 		public void Dispose()
 		{
 			// Save and clean up here
@@ -117,8 +109,8 @@ namespace Venturer.Core
 
 		public Screen ToScreen()
 		{
-			var screens = CompileScreenList(WindowWidth, WindowHeight);
-			return WriteScreens(screens, WindowWidth, WindowHeight);
+			var screens = CompileScreenList(_gameData.WindowWidth, _gameData.WindowHeight);
+			return WriteScreens(screens);
 		}
 
 		private List<Screen> CompileScreenList(int width, int height)
@@ -126,13 +118,13 @@ namespace Venturer.Core
 			return _screenStack.Select(s => s.ToScreen(width, height)).Reverse().ToList();
 		}
 
-		private static Screen WriteScreens(List<Screen> screens, int width, int height)
+		private Screen WriteScreens(IReadOnlyCollection<Screen> screens)
 		{
-			var returnCh = new Glyph[width, height];
+			var returnCh = new Glyph[_gameData.WindowWidth, _gameData.WindowHeight];
 
-			for (var x = 0; x < width; x++)
+			for (var x = 0; x < _gameData.WindowWidth; x++)
 			{
-				for (var y = 0; y < height; y++)
+				for (var y = 0; y < _gameData.WindowHeight; y++)
 				{
 					foreach (var screen in screens)
 					{

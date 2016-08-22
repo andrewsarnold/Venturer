@@ -8,10 +8,32 @@ namespace Venturer.Core.Input
 		{
 			switch (inputContext)
 			{
+				case InputContext.MainMenu:
+					return TranslateForMainMenu(key);
 				case InputContext.Game:
 					return TranslateForGame(key);
 				case InputContext.Menu:
 					return TranslateForMenu(key);
+			}
+
+			return Command.Null;
+		}
+
+		private static Command TranslateForMainMenu(ConsoleKeyInfo key)
+		{
+			switch (key.Key)
+			{
+				case ConsoleKey.W:
+				case ConsoleKey.UpArrow:
+					return Command.MoveUp;
+				case ConsoleKey.S:
+				case ConsoleKey.DownArrow:
+					return Command.MoveDown;
+				case ConsoleKey.P:
+				case ConsoleKey.Enter:
+					return Command.Select;
+				case ConsoleKey.Escape:
+					return Command.Quit;
 			}
 
 			return Command.Null;
@@ -71,9 +93,9 @@ namespace Venturer.Core.Input
 					return Command.MoveRight;
 				case ConsoleKey.M:
 					return Command.Misc;
-				default:
-					return Command.Quit;
 			}
+
+			return Command.Null;
 		}
 	}
 }

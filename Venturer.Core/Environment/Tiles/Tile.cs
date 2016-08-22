@@ -23,17 +23,6 @@ namespace Venturer.Core.Environment.Tiles
 			_darkBackgroundColor = darkBackgroundColor;
 		}
 
-		protected Tile(char representation,
-			ConsoleColor lightForegroundColor, ConsoleColor darkForegroundColor)
-		{
-			_hasSeen = false;
-			Representation = representation;
-			_lightForegroundColor = lightForegroundColor;
-			_darkForegroundColor = darkForegroundColor;
-			_lightBackgroundColor = lightForegroundColor;
-			_darkBackgroundColor = darkForegroundColor;
-		}
-
 		protected char Representation { private get; set; }
 
 		internal void SetAsSeen()

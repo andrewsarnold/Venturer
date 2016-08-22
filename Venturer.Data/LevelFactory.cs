@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Venturer.Core.Common;
+using Venturer.Core.Environment;
 using Venturer.Core.Screens;
 
-namespace Venturer.Core.Environment
+namespace Venturer.Data
 {
-	internal static class LevelFactory
+	internal class LevelFactory : ILevelFactory
 	{
-		internal static Level GetLevel()
+		public Level GetLevel()
 		{
 			return new Level(new Dictionary<string, Room>
 			{
@@ -22,14 +23,6 @@ namespace Venturer.Core.Environment
 				new Door(new Coord(0, 3), "end", new Coord(28, 2))
 			};
 			var room = new Room(width, height, doors);
-			room.OnEnter = () =>
-			{
-				//room.CreateNewViewPort(new Menu("Room menu", new List<MenuOption>
-				//{
-				//	new MenuOption("one", () => { }, false),
-				//	new MenuOption("two", () => { }, false)
-				//}, () => { }));
-			};
 			room.OnExit = () =>
 			{
 				room.CreateNewViewPort(new MultiTextScreen("you left the room"));

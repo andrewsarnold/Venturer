@@ -2,7 +2,7 @@
 
 namespace Venturer.Core.Environment
 {
-	internal class Level
+	public class Level
 	{
 		internal Dictionary<string, Room> Rooms;
 

@@ -10,24 +10,25 @@ namespace Venturer.Core.Screens
 {
 	internal class GameScreen : ViewPort
 	{
+		private readonly IGameData _gameData;
 		private const int MaxCameraDistance = 5;
 		private Room _room;
 		private Coord _camera;
 		private ViewPort _newScreen;
 		private readonly Level _level;
 		private readonly Player _player;
+		private bool _shouldDestroy;
 
-		public bool ShouldQuit { get; private set; }
-		public bool ShouldReset { get; private set; }
-
-		internal override bool ShouldDestroy => false;
+		internal override bool ShouldDestroy => _shouldDestroy;
 		internal override InputContext InputContext => InputContext.Game;
+		internal override bool ShouldQuit => false;
 
-		public GameScreen(int width, int height)
+		public GameScreen(IGameData gameData, int width, int height)
 			: base(width, height)
 		{
+			_gameData = gameData;
 			_player = new Player(new Coord());
-			_level = LevelFactory.GetLevel();
+			_level = _gameData.LevelFactory.GetLevel();
 			SetUpRoom(_level.Rooms.First().Value);
 		}
 
@@ -35,9 +36,6 @@ namespace Venturer.Core.Screens
 		{
 			switch (command)
 			{
-				case Command.Quit:
-					// menu
-					break;
 				case Command.MoveUp:
 				case Command.MoveDown:
 				case Command.MoveLeft:
@@ -129,29 +127,21 @@ namespace Venturer.Core.Screens
 			return new Coord(targetX, targetY);
 		}
 
-		private Direction TryToMove(Coord target, bool movedHorizontally)
+		private void TryToMove(Coord target, bool movedHorizontally)
 		{
 			// Is there a door here?
 			var doorHere = _room.Doors.SingleOrDefault(d => d.Location.Equals(target));
 			if (doorHere != null)
 			{
 				SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
-				return Direction.None;
+				return;
 			}
 
 			var couldMove = _room.IsInRoom(target) && _room.IsFreeOfArchitecture(target);
-			if (couldMove)
-			{
-				_player.Position = target;
-				ShiftCamera(movedHorizontally);
-				_room.SetAsSeen(target);
-			}
-
-			if (target.X < _player.Position.X) return Direction.West;
-			if (target.Y < _player.Position.Y) return Direction.North;
-			if (target.X > _player.Position.X) return Direction.East;
-			if (target.Y > _player.Position.Y) return Direction.South;
-			return Direction.None;
+			if (!couldMove) return;
+			_player.Position = target;
+			ShiftCamera(movedHorizontally);
+			_room.SetAsSeen(target);
 		}
 
 		private void ShiftCamera(bool movedHorizontally)
@@ -177,13 +167,25 @@ namespace Venturer.Core.Screens
 			{
 				return new Menu("P A U S E D", new List<MenuOption>
 				{
-					new MenuOption("Continue", () => { }, false),
-					new MenuOption("Reset", () => { ShouldReset = true; }, true),
-					new MenuOption("Save", () => { }, false),
-					new MenuOption("Quit", () => { ShouldQuit = true; }, true)
+					new MenuOption("Continue", () => { }, false, true),
+					new MenuOption("Save", () =>
+					{
+					    _newScreen = CommonMenus.SaveSlotPicker("Save game", SaveGame, () => { });
+					}, false, false),
+					new MenuOption("Quit", () =>
+					{
+						_newScreen = new MainMenu(_gameData);
+						_shouldDestroy = true;
+					}, true, true)
 				},
 				() => { });
 			}
 		}
+
+	    private void SaveGame(int saveSlot)
+	    {
+	        _gameData.SaveGame(saveSlot);
+            _newScreen = new MultiTextScreen("Game saved to slot " + saveSlot);
+	    }
 	}
 }

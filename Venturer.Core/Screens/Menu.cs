@@ -13,10 +13,11 @@ namespace Venturer.Core.Screens
 		private readonly List<MenuOption> _options;
 		private readonly Action _onEscape;
 		private ViewPort _newViewPort;
-		private bool _handled;
+		private bool _shouldDestroy;
 
-		internal override bool ShouldDestroy => _handled;
+		internal override bool ShouldDestroy => _shouldDestroy;
 		internal override InputContext InputContext => InputContext.Menu;
+		internal override bool ShouldQuit => false;
 
 		public Menu(string header, List<MenuOption> options, Action onEscape)
 			: base(0, 0)
@@ -36,7 +37,7 @@ namespace Venturer.Core.Screens
 			if (command == Command.Quit)
 			{
 				_onEscape();
-				_handled = true;
+				_shouldDestroy = true;
 				return false;
 			}
 
@@ -47,7 +48,7 @@ namespace Venturer.Core.Screens
 			{
 				var selection = command - commandMin;
 				_options[selection].Function();
-				_handled = true;
+				_shouldDestroy = _options[selection].DestroyWhenSelecting;
 				return _options[selection].Bubble;
 			}
 
