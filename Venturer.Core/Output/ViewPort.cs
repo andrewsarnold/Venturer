@@ -2,7 +2,7 @@
 
 namespace Venturer.Core.Output
 {
-	internal abstract class ViewPort
+	public abstract class ViewPort
 	{
 		/// <summary>
 		/// The output screen width.

@@ -49,6 +49,10 @@
       <Project>{1945300C-929F-493E-830D-A81AF2B69F9B}</Project>
       <Name>Venturer.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Venturer.Data\Venturer.Data.csproj">
+      <Project>{059B2406-2F93-48C1-BF81-4AFAAAA2D601}</Project>
+      <Name>Venturer.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

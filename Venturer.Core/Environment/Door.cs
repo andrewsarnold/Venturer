@@ -2,7 +2,7 @@ using Venturer.Core.Common;
 
 namespace Venturer.Core.Environment
 {
-	internal class Door
+	public class Door
 	{
 		internal Coord Location;
 		internal string TargetRoom;
