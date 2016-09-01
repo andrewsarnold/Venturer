@@ -9,7 +9,8 @@ namespace Venturer.Core.Screens
 {
 	public class MultiTextScreen : ViewPort
 	{
-		private readonly List<string> _strings;
+		private Action _onFinished;
+		private List<string> _strings;
 		private int _stringIndex;
 
 		internal override InputContext InputContext => InputContext.TextBox;
@@ -18,19 +19,25 @@ namespace Venturer.Core.Screens
 		public MultiTextScreen(string text)
 			: base(0, 0)
 		{
-			if (string.IsNullOrWhiteSpace(text))
-			{
-				throw new ArgumentException("No strings given");
-			}
+			Constructor(new List<string> { text }, () => { });
+		}
 
-			_strings = new List<string> { text };
-			_stringIndex = 0;
+		public MultiTextScreen(string text, Action onFinished)
+			: base(0, 0)
+		{
+			Constructor(new List<string> { text }, onFinished);
 		}
 
 		public MultiTextScreen(List<string> strings)
 			: base(0, 0)
 		{
-			if (strings == null || !strings.Any())
+			Constructor(strings, () => { });
+		}
+
+		private void Constructor(List<string> strings, Action onFinished)
+		{
+			_onFinished = onFinished;
+			if (strings == null || !strings.Any() || strings.Any(string.IsNullOrWhiteSpace))
 			{
 				throw new ArgumentException("No strings given");
 			}
@@ -52,6 +59,7 @@ namespace Venturer.Core.Screens
 		internal override bool HandleInput(Command command)
 		{
 			_stringIndex++;
+			_onFinished();
 			return true;
 		}
 

@@ -188,8 +188,27 @@ namespace Venturer.Core.Screens
 					}, false, false),
 					new MenuOption("Quit", () =>
 					{
-						_newScreen = new MainMenu(_gameData);
-						_shouldDestroy = true;
+						_newScreen = new Menu("Quit", new List<MenuOption>
+						{
+							new MenuOption("Save", () =>
+							{
+								_newScreen = CommonMenus.SaveSlotPicker("Save game", saveSlot =>
+								{
+									_gameData.SaveGame(saveSlot);
+									_newScreen = new MultiTextScreen("Game saved to slot " + saveSlot, () =>
+									{
+										_newScreen = new MainMenu(_gameData);
+										_shouldDestroy = true;
+									});
+								}, () => { });
+							}, false, true),
+							new MenuOption("Don't save", () =>
+							{
+								_newScreen = new MainMenu(_gameData);
+								_shouldDestroy = true;
+							}, false, true),
+							new MenuOption("Cancel", () => { }, false, true)
+						}, () => { });
 					}, true, true)
 				},
 				() => { });
