@@ -141,7 +141,10 @@ namespace Venturer.Core.Environment
 			foreach (var item in Items)
 			{
 				var isThisLit = isLit[item.Location.X, item.Location.Y];
-				Screen.AddChar(chars, item.Location.X + roomLeft, item.Location.Y + roomTop, new Glyph(item.Representation, isThisLit ? item.Color : item.UnlitColor, BackgroundColorAt(item.Location, isThisLit)));
+				Screen.AddChar(chars, item.Location.X + roomLeft, item.Location.Y + roomTop, new Glyph(item.Representation, isThisLit ? item.Color : item.UnlitColor,
+					item is CollectibleItem
+					? BackgroundColorAt(item.Location, isThisLit)
+					: (isThisLit ? item.BackgroundColor : item.UnlitBackgroundColor)));
 			}
 		}
 

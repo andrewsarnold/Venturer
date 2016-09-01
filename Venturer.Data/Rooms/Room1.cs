@@ -20,8 +20,9 @@ namespace Venturer.Data.Rooms
 			};
 			var items = new List<Item>
 			{
-				new Item("key", false, '\u00a5', ConsoleColor.Yellow, ConsoleColor.DarkYellow, new Coord(4, 4)),
-				new Item("umbrella", true, '\u03a8', ConsoleColor.Red, ConsoleColor.DarkRed, new Coord(3, 3))
+				new CollectibleItem("key", false, '\u00a5', ConsoleColor.Yellow, ConsoleColor.DarkYellow, new Coord(4, 4)),
+				new CollectibleItem("umbrella", true, '\u03a8', ConsoleColor.Red, ConsoleColor.DarkRed, new Coord(3, 3)),
+				new Item("dishwasher", false, '\u20dd', ConsoleColor.Black, ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.DarkGray, new Coord(5, 7))
 			};
 			var room = new Room("start", width, height, SetWalls(width, height), doors, items)
 			{
