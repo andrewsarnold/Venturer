@@ -207,7 +207,24 @@ namespace Venturer.Core.Screens
 			var itemsAroundPlayer = _room.Items.Where(i => Coord.Distance(i.Location, _player.Position) < 2).ToList();
 			if (itemsAroundPlayer.Count > 0)
 			{
-				var options = itemsAroundPlayer.Select(i => new MenuOption(i.AsListItem, () => { }, false, true)).ToList();
+				var options = itemsAroundPlayer.Select(i => new MenuOption(i.AsListItem, () =>
+				{
+					var innerOptions = i is CollectibleItem
+						? new List<MenuOption>
+						{
+							new MenuOption("Take", () =>
+							{
+								_newScreen = new MultiTextScreen($"You take the {i.Name}.");
+							}, false, true),
+							new MenuOption("Cancel", () => { }, false, true)
+						}
+						: new List<MenuOption>
+						{
+							new MenuOption("Cancel", () => { }, false, true)
+						};
+
+					_newScreen = new Menu(i.Name, innerOptions, () => { });
+				}, false, true)).ToList();
 				options.Add(new MenuOption("Cancel", () => { }, false, true));
 				_newScreen = new Menu("You look around and see:", options, () => { });
 			}

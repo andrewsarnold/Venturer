@@ -5,8 +5,7 @@ namespace Venturer.Core
 {
 	public class Item
 	{
-		private readonly string _name;
-
+		public readonly string Name;
 		public readonly char Representation;
 		public readonly ConsoleColor Color;
 		public readonly ConsoleColor UnlitColor;
@@ -18,7 +17,7 @@ namespace Venturer.Core
 
 		public Item(string name, bool nameStartsWithVowelSound, char representation, ConsoleColor color, ConsoleColor unlitColor, ConsoleColor backgroundColor, ConsoleColor unlitBackgroundColor, Coord location)
 		{
-			_name = name;
+			Name = name;
 			_nameStartsWithVowelSound = nameStartsWithVowelSound;
 			Representation = representation;
 			Color = color;
@@ -28,7 +27,7 @@ namespace Venturer.Core
 			Location = location;
 		}
 
-		public string AsListItem => string.Format("{0} {1}", _nameStartsWithVowelSound ? "An" : "A", _name);
+		public string AsListItem => string.Format("{0} {1}", _nameStartsWithVowelSound ? "An" : "A", Name);
 	}
 
 	public class CollectibleItem : Item
