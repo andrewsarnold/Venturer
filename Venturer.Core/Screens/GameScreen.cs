@@ -215,6 +215,8 @@ namespace Venturer.Core.Screens
 							new MenuOption("Take", () =>
 							{
 								_newScreen = new MultiTextScreen($"You take the {i.Name}.");
+								_gameData.Inventory.Add((CollectibleItem)i);
+								_room.Items.Remove(i);
 							}, false, true),
 							new MenuOption("Cancel", () => { }, false, true)
 						}
