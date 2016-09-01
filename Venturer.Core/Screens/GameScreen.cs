@@ -29,7 +29,7 @@ namespace Venturer.Core.Screens
 			_gameData = gameData;
 			_player = new Player(new Coord());
 			_level = _gameData.LevelFactory.GetLevel();
-			SetUpRoom(_level.Rooms.First().Value);
+			SetUpRoom(_level.FirstRoom);
 		}
 
 		internal override bool HandleInput(Command command)
@@ -41,7 +41,7 @@ namespace Venturer.Core.Screens
 				case Command.MoveLeft:
 				case Command.MoveRight:
 					DirectionallyInteract(command);
-					break;
+					return false;
 				case Command.ShowMenu:
 					_newScreen = PauseMenu;
 					break;
@@ -57,6 +57,11 @@ namespace Venturer.Core.Screens
 				case Command.Inspect:
 					Inspect();
 					break;
+			}
+
+			if (_room.DoneExiting)
+			{
+				SetUpRoom(_level.Rooms[_room.DoorExited.TargetRoom], _room.DoorExited.TargetCoord);
 			}
 
 			// GameScreen should be the last thing in the stack.
@@ -85,12 +90,11 @@ namespace Venturer.Core.Screens
 
 		private void SetUpRoom(Room room)
 		{
-			SetUpRoom(room, new Coord(room.Width / 2, room.Height / 2));
+			SetUpRoom(room, room.StartingLocation);
 		}
 
 		private void SetUpRoom(Room room, Coord playerLocation)
 		{
-			_room?.OnExit?.Invoke();
 			_room = room;
 			_player.Position = playerLocation;
 			_camera = _player.Position;
@@ -130,29 +134,28 @@ namespace Venturer.Core.Screens
 			return new Coord(targetX, targetY);
 		}
 
-		private Direction TryToMove(Coord target, bool movedHorizontally)
+		private void TryToMove(Coord target, bool movedHorizontally)
 		{
 			// Is there a door here?
 			var doorHere = _room.Doors.SingleOrDefault(d => d.Location.Equals(target));
 			if (doorHere != null)
 			{
-				SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
-				return Direction.None;
+				if (_room.OnExit != null)
+				{
+					_room.OnExit(doorHere);
+				}
+				else
+				{
+					SetUpRoom(_level.Rooms[doorHere.TargetRoom], doorHere.TargetCoord);
+				}
+				return;
 			}
 
 			var couldMove = _room.IsInRoom(target) && _room.IsFreeOfArchitecture(target);
-			if (couldMove)
-			{
-				_player.Position = target;
-				ShiftCamera(movedHorizontally);
-				_room.SetAsSeen(target);
-			}
-
-			if (target.X < _player.Position.X) return Direction.West;
-			if (target.Y < _player.Position.Y) return Direction.North;
-			if (target.X > _player.Position.X) return Direction.East;
-			if (target.Y > _player.Position.Y) return Direction.South;
-			return Direction.None;
+			if (!couldMove) return;
+			_player.Position = target;
+			ShiftCamera(movedHorizontally);
+			_room.SetAsSeen(target);
 		}
 
 		private void ShiftCamera(bool movedHorizontally)
@@ -176,7 +179,7 @@ namespace Venturer.Core.Screens
 		{
 			get
 			{
-				return new Menu("P A U S E D", new List<MenuOption>
+				return new Menu(Utilities.Stylize("Paused"), new List<MenuOption>
 				{
 					new MenuOption("Continue", () => { }, false, true),
 					new MenuOption("Save", () =>

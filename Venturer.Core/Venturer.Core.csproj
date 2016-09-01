@@ -42,6 +42,7 @@
     <Compile Include="Environment\Room.cs" />
     <Compile Include="Environment\Shadowcaster.cs" />
     <Compile Include="Environment\Tiles\DoorTile.cs" />
+    <Compile Include="Environment\Tiles\EmptyTile.cs" />
     <Compile Include="Environment\Tiles\FloorTile.cs" />
     <Compile Include="Environment\Tiles\Tile.cs" />
     <Compile Include="Environment\Tiles\WallTile.cs" />

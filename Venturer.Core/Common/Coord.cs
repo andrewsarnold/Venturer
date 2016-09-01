@@ -14,7 +14,7 @@ namespace Venturer.Core.Common
 		public int X { get; }
 		public int Y { get; }
 
-		internal static double Distance(Coord c1, Coord c2)
+		public static double Distance(Coord c1, Coord c2)
 		{
 			return Math.Sqrt(Math.Pow(c2.X - c1.X, 2) + Math.Pow(c2.Y - c1.Y, 2));
 		}

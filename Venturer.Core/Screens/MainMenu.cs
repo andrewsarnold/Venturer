@@ -46,6 +46,9 @@ namespace Venturer.Core.Screens
 				case Command.Select:
 					_options[_selectedIndex].Item2();
 					break;
+				case Command.Quit:
+					_shouldQuit = true;
+					break;
 			}
 			
 			return false;
@@ -54,6 +57,8 @@ namespace Venturer.Core.Screens
 		internal override Screen ToScreen(int width, int height, int xOffset = 0, int yOffset = 0)
 		{
 			var glyphs = new Glyph[width, height];
+
+			Utilities.WriteTextLine(glyphs, new Coord(4, 2), Utilities.Stylize(_gameData.GameTitle));
 
 			var startY = height / 2 - _options.Count / 2;
 			for (var y = 0; y < _options.Count; y++)

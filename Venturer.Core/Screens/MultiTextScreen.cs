@@ -52,7 +52,7 @@ namespace Venturer.Core.Screens
 		internal override bool HandleInput(Command command)
 		{
 			_stringIndex++;
-			return false;
+			return true;
 		}
 
 		internal override ViewPort GetAndClearNewViewPort()

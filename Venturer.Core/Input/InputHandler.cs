@@ -24,10 +24,14 @@ namespace Venturer.Core.Input
 			switch (key.Key)
 			{
 				case ConsoleKey.W:
+				case ConsoleKey.A:
 				case ConsoleKey.UpArrow:
+				case ConsoleKey.LeftArrow:
 					return Command.MoveUp;
 				case ConsoleKey.S:
+				case ConsoleKey.D:
 				case ConsoleKey.DownArrow:
+				case ConsoleKey.RightArrow:
 					return Command.MoveDown;
 				case ConsoleKey.P:
 				case ConsoleKey.Enter:

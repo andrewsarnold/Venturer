@@ -4,11 +4,13 @@ namespace Venturer.Core.Environment
 {
 	public class Level
 	{
-		internal Dictionary<string, Room> Rooms;
+		internal readonly Dictionary<string, Room> Rooms;
+		internal readonly Room FirstRoom;
 
-		public Level(Dictionary<string, Room> rooms)
+		public Level(Dictionary<string, Room> rooms, string firstRoom)
 		{
 			Rooms = rooms;
+			FirstRoom = rooms[firstRoom];
 		}
 	}
 }
