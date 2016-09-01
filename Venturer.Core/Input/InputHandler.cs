@@ -99,6 +99,8 @@ namespace Venturer.Core.Input
 					return Command.Misc;
 				case ConsoleKey.I:
 					return Command.Inspect;
+				case ConsoleKey.O:
+					return Command.Inventory;
 			}
 
 			return Command.Null;

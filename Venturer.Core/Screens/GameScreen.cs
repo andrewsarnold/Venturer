@@ -57,6 +57,9 @@ namespace Venturer.Core.Screens
 				case Command.Inspect:
 					Inspect();
 					break;
+				case Command.Inventory:
+					Inventory();
+					break;
 			}
 
 			if (_room.DoneExiting)
@@ -234,6 +237,14 @@ namespace Venturer.Core.Screens
 			{
 				_newScreen = new MultiTextScreen("You look around, but there is nothing nearby.");
 			}
+		}
+
+		private void Inventory()
+		{
+			_newScreen = new Menu("Inventory", _gameData.Inventory.Select(i => new MenuOption(i.AsListItem, () => { }, false, false)).Union(new List<MenuOption>
+			{
+				new MenuOption("Cancel", () => { }, false, true)
+			}).ToList(), () => { });
 		}
 	}
 }

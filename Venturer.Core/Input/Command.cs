@@ -21,6 +21,7 @@ namespace Venturer.Core.Input
 		ShowMenu,
 		Misc,
 		Select,
-		Inspect
+		Inspect,
+		Inventory
 	}
 }
