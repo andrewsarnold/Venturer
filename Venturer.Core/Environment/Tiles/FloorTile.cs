@@ -6,13 +6,15 @@ namespace Venturer.Core.Environment.Tiles
 	public class FloorTile : Tile
 	{
 		public FloorTile()
-			: base(CodePoint.FullBlock, ConsoleColor.DarkBlue, ConsoleColor.Black)
+			: base(CodePoint.Space, ConsoleColor.DarkGray, ConsoleColor.Black, ConsoleColor.Black, ConsoleColor.Black)
 		{
 		}
 
-		internal override bool CanTraverse
+		internal void SetRepresentation(char c)
 		{
-			get { return true; }
+			Representation = c;
 		}
+
+		internal override bool CanTraverse => true;
 	}
 }

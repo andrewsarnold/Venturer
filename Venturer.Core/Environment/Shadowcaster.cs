@@ -247,9 +247,9 @@ namespace Venturer.Core.Environment
 				TopVector = top;
 			}
 
-			public int X { get; private set; }
-			public DirectionVector BottomVector { get; private set; }
-			public DirectionVector TopVector { get; private set; }
+			public int X { get; }
+			public DirectionVector BottomVector { get; }
+			public DirectionVector TopVector { get; }
 		}
 
 		private struct DirectionVector
@@ -261,8 +261,8 @@ namespace Venturer.Core.Environment
 				Y = y;
 			}
 
-			public int X { get; private set; }
-			public int Y { get; private set; }
+			public int X { get; }
+			public int Y { get; }
 		}
 	}
 }

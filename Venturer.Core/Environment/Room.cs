@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Venturer.Core.Common;
 using Venturer.Core.Environment.Tiles;
 using Venturer.Core.Output;
@@ -10,31 +11,34 @@ namespace Venturer.Core.Environment
 		private readonly int _viewDistance;
 		private readonly Tile[,] _tiles;
 
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+		public string Name { get; }
+		public int Width { get; }
+		public int Height { get; }
+		public Coord StartingLocation;
 
-		internal Room(Tile[,] tiles, int width, int height)
+		internal readonly List<Door> Doors;
+		internal readonly List<Item> Items;
+
+		public Action OnEnter;
+		public Action<Door> OnExit;
+		public bool DoneExiting;
+		public Door DoorExited;
+
+		internal event EventHandler<ViewPort> ShowNewViewPort;
+
+		public Room(string name, int width, int height, Tile[,] tiles, List<Door> doors, List<Item> items)
 		{
+			Name = name;
+			Doors = doors;
 			_tiles = tiles;
+			Items = items;
 			_viewDistance = 15;
 			Width = width;
 			Height = height;
 
-			var r = new Random();
-			for (var x = 0; x < width; x++)
-			{
-				for (var y = 0; y < height; y++)
-				{
-					_tiles[x, y] =
-						x == 0 ||
-						y == 0 ||
-						x == width - 1 ||
-						y == height - 1 ||
-						r.NextDouble() > 0.9
-							? new WallTile()
-							: (Tile) new FloorTile();
-				}
-			}
+			SetWallVisuals();
+			SetFloorVisuals();
+			SetDoors();
 		}
 
 		public void Draw(Glyph[,] chars, int roomLeft, int roomTop, Coord player)
@@ -56,6 +60,56 @@ namespace Venturer.Core.Environment
 				target.Y >= 0 &&
 				target.X < Width &&
 				target.Y < Height;
+		}
+
+		private void SetWallVisuals()
+		{
+			for (var x = 0; x < Width; x++)
+			{
+				for (var y = 0; y < Height; y++)
+				{
+					var wallTile = _tiles[x, y] as WallTile;
+					if (wallTile == null) continue;
+					var top = y > 0 && _tiles[x, y - 1] is WallTile;
+					var bottom = y < Height - 1 && _tiles[x, y + 1] is WallTile;
+					var left = x > 0 && _tiles[x - 1, y] is WallTile;
+					var right = x < Width - 1 && _tiles[x + 1, y] is WallTile;
+					wallTile.SetNeighbors(top, right, bottom, left);
+				}
+			}
+		}
+
+		private void SetFloorVisuals()
+		{
+			var r = new Random();
+			for (var x = 0; x < Width; x++)
+			{
+				for (var y = 0; y < Height; y++)
+				{
+					var floorTile = _tiles[x, y] as FloorTile;
+					if (floorTile == null) continue;
+					switch (r.Next(10))
+					{
+						case 0:
+							floorTile.SetRepresentation(CodePoint.Comma);
+							break;
+						case 1:
+							floorTile.SetRepresentation(CodePoint.Period);
+							break;
+						case 2:
+							floorTile.SetRepresentation(CodePoint.Apostrophe);
+							break;
+					}
+				}
+			}
+		}
+
+		private void SetDoors()
+		{
+			foreach (var door in Doors)
+			{
+				_tiles[door.Location.X, door.Location.Y] = new DoorTile();
+			}
 		}
 
 		private bool[,] FindLitTiles(Coord player)
@@ -83,6 +137,12 @@ namespace Venturer.Core.Environment
 					Screen.AddChar(chars, x + roomLeft, y + roomTop, _tiles[x, y].ToCharacter(isLit[x, y]));
 				}
 			}
+
+			foreach (var item in Items)
+			{
+				var isThisLit = isLit[item.Location.X, item.Location.Y];
+				Screen.AddChar(chars, item.Location.X + roomLeft, item.Location.Y + roomTop, new Glyph(item.Representation, isThisLit ? item.Color : item.UnlitColor, BackgroundColorAt(item.Location, isThisLit)));
+			}
 		}
 
 		internal void SetAsSeen(Coord target)
@@ -90,9 +150,14 @@ namespace Venturer.Core.Environment
 			_tiles[target.X, target.Y].SetAsSeen();
 		}
 
-		internal ConsoleColor BackgroundColorAt(Coord c)
+		internal ConsoleColor BackgroundColorAt(Coord c, bool isVisible)
 		{
-			return _tiles[c.X, c.Y].ToCharacter(true).BackgroundColor;
+			return _tiles[c.X, c.Y].ToCharacter(isVisible).BackgroundColor;
+		}
+
+		public void CreateNewViewPort(ViewPort viewPort)
+		{
+			ShowNewViewPort?.Invoke(this, viewPort);
 		}
 	}
 }

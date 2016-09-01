@@ -18,6 +18,9 @@ namespace Venturer.Core.Input
 		MenuItem7,
 		MenuItem8,
 		MenuItem9,
-		ShowMenu
+		ShowMenu,
+		Misc,
+		Select,
+		Inspect
 	}
 }

@@ -13,14 +13,23 @@ namespace Venturer.Core.Screens
 		private readonly List<MenuOption> _options;
 		private readonly Action _onEscape;
 		private ViewPort _newViewPort;
-		private bool _handled;
+		private bool _shouldDestroy;
 
-		public Menu(int width, int height, string header, List<MenuOption> options, Action onEscape)
-			: base(Math.Max(width, header.Length), height)
+		internal override bool ShouldDestroy => _shouldDestroy;
+		internal override InputContext InputContext => InputContext.Menu;
+		internal override bool ShouldQuit => false;
+
+		public Menu(string header, List<MenuOption> options, Action onEscape)
+			: base(0, 0)
 		{
 			if (options.Count > 9)
 			{
 				throw new ArgumentException("Too many options");
+			}
+
+			if (options.Count < 1)
+			{
+				throw new ArgumentException("Not enough options");
 			}
 
 			_header = header;
@@ -33,7 +42,7 @@ namespace Venturer.Core.Screens
 			if (command == Command.Quit)
 			{
 				_onEscape();
-				_handled = true;
+				_shouldDestroy = true;
 				return false;
 			}
 
@@ -44,7 +53,7 @@ namespace Venturer.Core.Screens
 			{
 				var selection = command - commandMin;
 				_options[selection].Function();
-				_handled = true;
+				_shouldDestroy = _options[selection].DestroyWhenSelecting;
 				return _options[selection].Bubble;
 			}
 
@@ -53,10 +62,10 @@ namespace Venturer.Core.Screens
 
 		internal override Screen ToScreen(int width, int height, int xOffset = 0, int yOffset = 0)
 		{
-			var glyphs = new Glyph[Width, Height];
+			var glyphs = new Glyph[width, height];
 			var textLines = new List<string> { _header, " " }
 				.Union(_options.Select((t, i) => string.Format("{0} {1}", i + 1, t.Text)));
-			Utilities.TextBox(glyphs, textLines, Width, Height);
+			Utilities.TextBox(glyphs, textLines, width, height);
 			return new Screen(glyphs);
 		}
 
@@ -65,16 +74,6 @@ namespace Venturer.Core.Screens
 			var newViewPort = _newViewPort;
 			_newViewPort = null;
 			return newViewPort;
-		}
-
-		internal override bool ShouldDestroy
-		{
-			get { return _handled; }
-		}
-
-		internal override InputContext InputContext
-		{
-			get { return InputContext.Menu; }
 		}
 	}
 }
